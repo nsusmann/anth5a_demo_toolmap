@@ -241,7 +241,7 @@
     ["chartKind", "chartBreak", "chartSort"].forEach(function (id) {
       $(id).addEventListener("change", render);
     });
-    ["mapColour", "mapSize"].forEach(function (id) {
+    ["mapColour", "mapShape", "mapSize"].forEach(function (id) {
       $(id).addEventListener("change", render);
     });
     $("fitBtn").addEventListener("click", fitMap);
@@ -860,7 +860,8 @@
 
   function prettyKey(k) {
     return { species: "species", technology: "technology", entry_type: "entry type",
-             continent: "region", country: "country" }[k] || k;
+             continent: "region", country: "country",
+             single_chain: "scope of entry" }[k] || k;
   }
   function round1(v) { return Math.round(v * 10) / 10; }
   function wrapText(s, n) {
@@ -904,6 +905,39 @@
     mapReady = true;
   }
 
+  /* --- shape as a second encoding channel -------------------------------
+     Colour carries one dimension, shape another, so the map can be read as a
+     cross-tabulation: "H. sapiens AND Acheulean" is one colour and one shape.
+     Six shapes is the practical ceiling at this size; the rest fold into a
+     seventh "other" glyph. Shape doubles as the CVD fallback for colour. */
+  var SHAPES = ["circle", "square", "triangle", "diamond", "cross", "triangle-down", "hexagon"];
+
+  // paths drawn in a 24x24 box centred on (12,12)
+  function shapePath(shape) {
+    switch (shape) {
+      case "square":        return '<rect x="4.5" y="4.5" width="15" height="15" rx="2"/>';
+      case "triangle":      return '<path d="M12 3.2 21 19.4H3z"/>';
+      case "triangle-down": return '<path d="M12 20.8 3 4.6h18z"/>';
+      case "diamond":       return '<path d="M12 2.6 21.4 12 12 21.4 2.6 12z"/>';
+      case "cross":         return '<path d="M9.2 2.8h5.6v6.4h6.4v5.6h-6.4v6.4H9.2v-6.4H2.8V9.2h6.4z"/>';
+      case "hexagon":       return '<path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z"/>';
+      default:              return '<circle cx="12" cy="12" r="8.6"/>';
+    }
+  }
+
+  function shapeSvg(shape, fill, px, stroke) {
+    return '<svg width="' + px + '" height="' + px + '" viewBox="0 0 24 24" ' +
+           'style="display:block;overflow:visible">' +
+           '<g fill="' + fill + '" stroke="' + stroke + '" stroke-width="2" ' +
+           'stroke-linejoin="round" vector-effect="non-scaling-stroke">' +
+           shapePath(shape) + "</g></svg>";
+  }
+
+  function shapeFor(value, keys) {
+    var i = keys.indexOf(value);
+    return i < 0 || i >= SHAPES.length ? SHAPES[SHAPES.length - 1] : SHAPES[i];
+  }
+
   function colourFor(value, keys) {
     var palette = SERIES();
     var i = keys.indexOf(value);
@@ -914,51 +948,114 @@
     ensureMap();
     markerLayer.clearLayers();
 
-    var key = $("mapColour").value;
+    var colourKey = $("mapColour").value;
+    var shapeKey = $("mapShape").value;
     var sizeBy = $("mapSize").value;
     var mapped = rows.filter(function (r) { return r.lat !== null; });
 
-    var counts = {};
-    mapped.forEach(function (r) { var v = groupValue(r, key); counts[v] = (counts[v] || 0) + 1; });
-    var keys = sortCats(Object.keys(counts), key, counts).slice(0, 8);
+    // Assign colour and shape from the WHOLE dataset, not the filtered rows, so a
+    // filter never repaints or re-shapes the survivors: an entity keeps its glyph.
+    var allMapped = DATA.filter(function (r) { return r.lat !== null; });
+    var colourKeys = catKeys(allMapped, colourKey, 8);
+    var shapeKeys = shapeKey ? catKeys(allMapped, shapeKey, SHAPES.length) : [];
+    var ring = css("--surface-1");
 
     mapped.forEach(function (r) {
-      var v = groupValue(r, key);
-      var radius = sizeBy === "pu_count" ? 4 + (r.pu_count / 25) * 9 : 6;
-      var m = L.circleMarker([r.lat, r.lon], {
-        radius: radius,
-        fillColor: colourFor(v, keys),
-        color: css("--surface-1"),
-        weight: 2, opacity: 1, fillOpacity: 0.85
-      });
+      var fill = colourFor(groupValue(r, colourKey), colourKeys);
+      var px = sizeBy === "pu_count" ? Math.round(13 + (r.pu_count / 25) * 15) : 16;
+      var m;
+
+      if (!shapeKey) {
+        m = L.circleMarker([r.lat, r.lon], {
+          radius: px / 2, fillColor: fill, color: ring,
+          weight: 2, opacity: 1, fillOpacity: 0.85
+        });
+      } else {
+        var shape = shapeFor(groupValue(r, shapeKey), shapeKeys);
+        m = L.marker([r.lat, r.lon], {
+          icon: L.divIcon({
+            className: "shape-marker",
+            html: shapeSvg(shape, fill, px, ring),
+            iconSize: [px, px],
+            iconAnchor: [px / 2, px / 2]
+          }),
+          keyboard: false
+        });
+      }
+
       m.bindPopup(popupHtml(r), { maxWidth: 340 });
       m.bindTooltip(r.site, { direction: "top", offset: [0, -4] });
       markerLayer.addLayer(m);
     });
 
-    var legend = $("mapLegend");
-    legend.innerHTML = "";
-    keys.forEach(function (k) {
-      var s = document.createElement("span");
-      s.innerHTML = '<i style="background:' + colourFor(k, keys) + '"></i>' + esc(k) +
-                    " (" + counts[k] + ")";
-      legend.appendChild(s);
-    });
-    if (Object.keys(counts).length > 8) {
-      var s2 = document.createElement("span");
-      s2.innerHTML = '<i style="background:' + css("--series-other") + '"></i>other';
-      legend.appendChild(s2);
-    }
+    drawMapLegend(mapped, colourKey, colourKeys, shapeKey, shapeKeys);
 
     var hidden = rows.length - mapped.length;
     $("mapNote").textContent =
       mapped.length + " of " + rows.length + " filtered entries are plotted." +
       (hidden ? " " + hidden + " have no coordinates in the dataset (primate and experimental entries) " +
                 "and cannot be mapped." : "") +
+      (shapeKey ? " Colour shows " + prettyKey(colourKey) + " and shape shows " +
+                  prettyKey(shapeKey) + ", so each point reads as both at once." : "") +
       " Site coordinates in this release are approximate.";
 
     fitMap();
   }
+
+  // the categories of `key` present in `rows`, in display order, capped at `max`
+  function catKeys(rows, key, max) {
+    var counts = {};
+    rows.forEach(function (r) { var v = groupValue(r, key); counts[v] = (counts[v] || 0) + 1; });
+    return sortCats(Object.keys(counts), key, counts).slice(0, max);
+  }
+
+  function drawMapLegend(mapped, colourKey, colourKeys, shapeKey, shapeKeys) {
+    var legend = $("mapLegend");
+    var counts = {};
+    mapped.forEach(function (r) { var v = groupValue(r, colourKey); counts[v] = (counts[v] || 0) + 1; });
+
+    var html = '<div class="legend-row"><span class="legend-lead">' +
+               esc(cap(prettyKey(colourKey))) + "</span>";
+    colourKeys.forEach(function (k) {
+      if (!counts[k]) return;
+      html += '<span><i style="background:' + colourFor(k, colourKeys) + '"></i>' +
+              esc(k) + " (" + counts[k] + ")</span>";
+    });
+    var otherN = Object.keys(counts).reduce(function (a, k) {
+      return a + (colourKeys.indexOf(k) < 0 ? counts[k] : 0);
+    }, 0);
+    if (otherN) {
+      html += '<span><i style="background:' + css("--series-other") + '"></i>other (' +
+              otherN + ")</span>";
+    }
+    html += "</div>";
+
+    if (shapeKey) {
+      var sCounts = {};
+      mapped.forEach(function (r) {
+        var v = groupValue(r, shapeKey); sCounts[v] = (sCounts[v] || 0) + 1;
+      });
+      var ink = css("--text-secondary"), bg = css("--surface-1");
+      html += '<div class="legend-row"><span class="legend-lead">' +
+              esc(cap(prettyKey(shapeKey))) + "</span>";
+      shapeKeys.forEach(function (k) {
+        if (!sCounts[k]) return;
+        html += "<span>" + shapeSvg(shapeFor(k, shapeKeys), ink, 13, bg) +
+                esc(k) + " (" + sCounts[k] + ")</span>";
+      });
+      var sOther = Object.keys(sCounts).reduce(function (a, k) {
+        return a + (shapeKeys.indexOf(k) < 0 ? sCounts[k] : 0);
+      }, 0);
+      if (sOther) {
+        html += "<span>" + shapeSvg(SHAPES[SHAPES.length - 1], ink, 13, bg) +
+                "other (" + sOther + ")</span>";
+      }
+      html += "</div>";
+    }
+    legend.innerHTML = html;
+  }
+
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
   function fitMap() {
     if (!mapReady || !markerLayer) return;

@@ -120,6 +120,21 @@ The `(probable)` values share their parent industry's photograph. In map popups 
 labelled *reference photograph* and *not an artefact from this site*, because it illustrates the
 industry rather than the entry.
 
+### Reading two dimensions at once on the map
+
+The map has **Colour points by** and **Shape points by**. Set them to different fields and each
+point encodes both, so you can read an intersection directly — colour by Species and shape by
+Technology, and an orange square is *Unattributed × Oldowan* while an orange diamond is
+*Unattributed × Acheulean*. Both legends are drawn under the map.
+
+Seven shapes are available (circle, square, triangle, diamond, cross, inverted triangle, and a
+hexagon for the overflow), which is about the ceiling at map-marker size. Glyphs are assigned
+from the whole dataset rather than from whatever survives the current filter, so a category
+keeps the same colour and the same shape no matter how you narrow the query.
+
+Shape also works as a fallback for colour: the pairing stays readable in greyscale, in print, and
+for colour-blind readers.
+
 ---
 
 ## Teaching notes
