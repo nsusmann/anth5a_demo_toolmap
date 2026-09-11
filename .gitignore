@@ -2,3 +2,5 @@
 ~$*
 # local build inputs
 countries50.geojson
+__pycache__/
+*.pyc
