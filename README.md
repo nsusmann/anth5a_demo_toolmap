@@ -5,7 +5,7 @@ tools were made across 3 million years of hominin evolution. Students can query 
 species, country and manufacturing technique, and read the result as a chart, a map or a table.
 No account or login is needed — it is a static site.
 
-**Live site:** https://<your-github-username>.github.io/<repository-name>/
+**Live site:** <https://nsusmann.github.io/anth5a_demo_toolmap/>
 
 ---
 
@@ -95,11 +95,15 @@ Worth saying out loud to a class, because the dataset rewards care:
 
 ## Publishing to GitHub Pages
 
+This repository is already published at <https://nsusmann.github.io/anth5a_demo_toolmap/>,
+served from the `main` branch root. Pushing to `main` redeploys it within a minute or two.
+
+To set the same thing up from scratch elsewhere:
+
 1. Create a repository on GitHub and push this folder to it.
 2. In the repository, go to **Settings → Pages**.
 3. Under *Build and deployment*, set **Source** to `Deploy from a branch`, pick the `main`
    branch and the `/ (root)` folder, and save.
-4. Wait a minute, then open `https://<username>.github.io/<repository>/`.
 
 The site is plain HTML, CSS and JavaScript with no build step. Leaflet and Chart.js load from
 cdnjs with subresource-integrity hashes; map tiles come from Esri's keyless gray canvas service.
