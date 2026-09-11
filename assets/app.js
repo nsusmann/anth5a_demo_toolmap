@@ -306,10 +306,79 @@
     $("resultCount").innerHTML = "Showing <strong>" + rows.length + "</strong> of " +
       DATA.length + " entries";
 
+    drawTechFigures(rows);
+
     var active = document.querySelector(".tab.is-on").id;
     if (active === "tab-chart") { if (typeof Chart !== "undefined") drawChart(rows); }
     else if (active === "tab-map") drawMap(rows);
     else if (active === "tab-table") drawTable(rows);
+  }
+
+  /* =================== technology reference photographs =================== */
+  // Which technologies is the current view actually about? Whatever the user has
+  // filtered to; otherwise whatever the active view is keyed on.
+  function technologiesInPlay(rows) {
+    if (state.technology.length) return state.technology.slice();
+
+    var active = document.querySelector(".tab.is-on").id;
+    var keyed = false;
+    if (active === "tab-chart") {
+      keyed = $("chartKind").value === "technology" || $("chartBreak").value === "technology";
+    } else if (active === "tab-map") {
+      keyed = $("mapColour").value === "technology";
+    }
+    if (!keyed) return [];
+
+    // show the industries actually present in the filtered rows, in scheme order
+    var present = {};
+    rows.forEach(function (r) { present[r.technology] = true; });
+    return META.technology_order.filter(function (t) {
+      return present[t] && t !== "Other";
+    });
+  }
+
+  function drawTechFigures(rows) {
+    var panel = $("techFigures");
+    var wanted = technologiesInPlay(rows);
+    // collapse "(probable)" onto the parent industry so the photo is not repeated
+    var seen = {}, cards = [];
+    wanted.forEach(function (t) {
+      var src = META.technology_image_of[t];
+      if (!src || seen[src]) return;
+      seen[src] = true;
+      cards.push(src);
+    });
+
+    if (!cards.length) { panel.hidden = true; panel.innerHTML = ""; return; }
+
+    panel.innerHTML = cards.map(function (name) {
+      var info = META.technology_images[name];
+      var n = rows.filter(function (r) {
+        return META.technology_image_of[r.technology] === name;
+      }).length;
+
+      var visual = info.image
+        ? '<img class="tf-img" src="' + esc(info.image) + '" alt="' + esc(info.alt) + '" loading="lazy">'
+        : '<div class="tf-none">' + esc(info.caption) + "</div>";
+
+      var credit;
+      if (info.image) {
+        credit = 'Photo: ' + esc(info.credit) + ', <a href="' + esc(info.source) +
+                 '" target="_blank" rel="noopener">Wikimedia Commons</a>, ' +
+                 '<a href="' + esc(info.licence_url) + '" target="_blank" rel="noopener">' +
+                 esc(info.licence) + "</a>";
+      } else {
+        credit = '<a href="' + esc(info.link) + '" target="_blank" rel="noopener">' +
+                 esc(info.link_text) + "</a>";
+      }
+
+      return '<figure class="tech-fig">' + visual +
+        '<figcaption><span class="tf-name">' + esc(name) +
+        ' <span class="tf-n">' + n + (n === 1 ? " entry" : " entries") + "</span></span>" +
+        (info.image ? '<p class="tf-cap">' + esc(info.caption) + "</p>" : "") +
+        '<p class="tf-credit">' + credit + "</p></figcaption></figure>";
+    }).join("");
+    panel.hidden = false;
   }
 
   function describeQuery() {
@@ -920,8 +989,20 @@
       (r.description ? '<p class="pop-tech"><b>Technology described</b>' + esc(r.description) + "</p>" : "") +
       '<p class="pop-tech"><b>Procedural units present</b>' +
       (present.length ? esc(present.join(", ")) : "none recorded") + "</p>" +
+      techThumb(r) +
       '<p class="pop-foot">† Technology is an interpretation added for this page, not part ' +
       "of the published dataset.</p></div>";
+  }
+
+  // A reference photograph of the industry - not this artefact. Say so.
+  function techThumb(r) {
+    var name = META.technology_image_of[r.technology];
+    var info = name && META.technology_images[name];
+    if (!info || !info.image) return "";
+    return '<p class="pop-tech"><b>' + esc(name) + " (reference photograph)</b>" +
+      '<img class="pop-thumb" src="' + esc(info.image) + '" alt="' + esc(info.alt) + '" loading="lazy">' +
+      '<span class="td-sub">' + esc(info.caption) + " Photo: " + esc(info.credit) + ", " +
+      esc(info.licence) + ". Not an artefact from this site.</span></p>";
   }
 
   /* =============================== table =============================== */

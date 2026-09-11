@@ -47,6 +47,7 @@ Each of the 155 rows is **one technology or one set of technologies** reported i
 | `stone_tools.kml` | All 145 mapped entries for Google Earth or QGIS |
 | `Paige_Perreault_2023_DatasetManufacture.pdf` | The published paper |
 | `procedural units obfus.xlsx` | The source workbook, unmodified |
+| `assets/img/` | Reference photographs of an Oldowan chopper and an Acheulean biface |
 | `build/` | The scripts that regenerate the CSV, JSON and KML |
 
 ### The KML
@@ -94,6 +95,30 @@ All are flagged in the app's *Citation & notes* tab, and none is the authors' wo
 
 Site coordinates in this release of the workbook are **approximate** — they show the right
 region but not an exact findspot.
+
+### Reference photographs
+
+Two Wikimedia Commons photographs are bundled in `assets/img/` and shown whenever a technology
+is on screen — when you filter by Technology, chart by it, or colour the map by it. Both are
+artefacts from the **type site** of their industry:
+
+| Industry | Photograph | Credit | Licence |
+|---|---|---|---|
+| Oldowan | [Olduvai chopper](https://commons.wikimedia.org/wiki/File:Olduvai_Chopper.JPG), Olduvai Gorge, c. 1.8 Ma, British Museum | Archaeomoonwalker | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0) |
+| Acheulean | [Biface de St Acheul](https://commons.wikimedia.org/wiki/File:Biface_de_St_Acheul_MHNT.jpg), Saint-Acheul, c. 500–300 ka, Muséum de Toulouse | Didier Descouens | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+
+Both licences require attribution, which is rendered beside every appearance of the image. The
+files were downscaled to 760px for the web — a technical modification the licences allow, not
+an adaptation.
+
+**There is no Lomekwian photograph.** No freely-licensed image of a Lomekwi 3 artefact exists on
+Wikimedia (Commons was searched for *Lomekwi*, *Lomekwian*, *West Turkana* and *Harmand*); the
+only published photographs are the copyrighted figures in Harmand et al. 2015. Rather than
+substitute something misleading, that card says so and links to the paper.
+
+The `(probable)` values share their parent industry's photograph. In map popups the image is
+labelled *reference photograph* and *not an artefact from this site*, because it illustrates the
+industry rather than the entry.
 
 ---
 

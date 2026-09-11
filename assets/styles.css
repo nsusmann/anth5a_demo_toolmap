@@ -418,3 +418,51 @@ dialog::backdrop { background: rgba(11,11,11,.45); }
   margin: 8px 0 0; padding-top: 7px; border-top: 1px solid var(--border);
   font-size: 11px; color: var(--text-muted); line-height: 1.35;
 }
+
+/* ---------------------- technology reference photos ---------------------- */
+.tech-figures {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.tech-figures[hidden] { display: none; }
+.tech-fig {
+  flex: 1 1 210px; max-width: 300px; margin: 0;
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.tech-fig .tf-img {
+  /* contain, not cover: never crop an artefact photograph */
+  display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain;
+  background: #111; border-bottom: 1px solid var(--border);
+}
+.tech-fig .tf-none {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  aspect-ratio: 4 / 3; padding: 14px; border-bottom: 1px solid var(--border);
+  background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 8px,
+              var(--surface-1) 8px, var(--surface-1) 16px);
+  font-size: 12px; color: var(--text-muted); line-height: 1.4;
+}
+.tech-fig figcaption { padding: 9px 11px 10px; }
+.tech-fig .tf-name {
+  display: block; font-size: 13px; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.tech-fig .tf-n {
+  font-weight: 400; color: var(--text-muted); font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+.tech-fig .tf-cap { margin: 0; font-size: 11.5px; color: var(--text-secondary); line-height: 1.4; }
+.tech-fig .tf-credit { margin: 5px 0 0; font-size: 10.5px; color: var(--text-muted); line-height: 1.35; }
+.tech-fig .tf-credit a { color: var(--text-muted); text-decoration: underline; }
+.tech-fig .tf-credit a:hover { color: var(--accent-ink); }
+
+.pop-thumb {
+  display: block; width: 100%; max-width: 150px; border-radius: 5px;
+  margin: 8px 0 0; border: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  .tech-figures { padding: 12px; gap: 10px; }
+  .tech-fig { flex-basis: 140px; }
+}

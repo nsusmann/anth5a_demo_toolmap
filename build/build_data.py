@@ -124,6 +124,56 @@ _tag("Acheulean (probable)", [
 TECHNOLOGY_ORDER = ["Lomekwian", "Oldowan", "Oldowan (probable)",
                     "Acheulean", "Acheulean (probable)", "Other"]
 
+# Reference photographs, from Wikimedia Commons. Both are of artefacts from the
+# type sites of their industry. Attribution is required by both licences and is
+# rendered with every appearance of the image.
+#
+# There is deliberately no Lomekwian photograph: no freely-licensed image of a
+# Lomekwi 3 artefact exists on Wikimedia (searched Commons for Lomekwi,
+# Lomekwian, West Turkana and Harmand). The only published photographs are the
+# copyrighted figures in Harmand et al. 2015, so that card says so instead of
+# showing something misleading.
+TECHNOLOGY_IMAGES = {
+    "Lomekwian": {
+        "image": None,
+        "caption": "No freely-licensed photograph of a Lomekwi 3 artefact exists. "
+                   "The only published images are the copyrighted figures in "
+                   "Harmand et al. 2015.",
+        "link": "https://doi.org/10.1038/nature14464",
+        "link_text": "Harmand et al. 2015, Nature",
+    },
+    "Oldowan": {
+        "image": "assets/img/oldowan-chopper.jpg",
+        "alt": "A rounded volcanic cobble with several large flakes struck from one edge, "
+               "forming an irregular chopping edge, displayed on a museum mount.",
+        "caption": "Oldowan chopper from Olduvai Gorge, Tanzania, c. 1.8 Ma. "
+                   "British Museum.",
+        "credit": "Archaeomoonwalker",
+        "licence": "CC BY 3.0",
+        "licence_url": "https://creativecommons.org/licenses/by/3.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Olduvai_Chopper.JPG",
+    },
+    "Acheulean": {
+        "image": "assets/img/acheulean-biface.jpg",
+        "alt": "A teardrop-shaped flint handaxe worked over both faces to a symmetrical "
+               "point, with a 19th-century oval collection label reading St Acheul.",
+        "caption": "Acheulean biface from Saint-Acheul, France, c. 500-300 ka — the "
+                   "type site of the Acheulean. Muséum de Toulouse.",
+        "credit": "Didier Descouens",
+        "licence": "CC BY-SA 4.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Biface_de_St_Acheul_MHNT.jpg",
+    },
+}
+# the "(probable)" values borrow their parent industry's photograph
+TECHNOLOGY_IMAGE_OF = {
+    "Lomekwian": "Lomekwian",
+    "Oldowan": "Oldowan",
+    "Oldowan (probable)": "Oldowan",
+    "Acheulean": "Acheulean",
+    "Acheulean (probable)": "Acheulean",
+}
+
 
 def norm_species(s):
     s = (s or "").strip()
@@ -260,6 +310,8 @@ def main():
         ],
         "groups": list(GROUPS.keys()),
         "technology_order": TECHNOLOGY_ORDER,
+        "technology_images": TECHNOLOGY_IMAGES,
+        "technology_image_of": TECHNOLOGY_IMAGE_OF,
         "n_records": len(recs),
     }
     with open(os.path.join(ROOT, "data", "stone_tools.json"), "w", encoding="utf-8") as fh:
