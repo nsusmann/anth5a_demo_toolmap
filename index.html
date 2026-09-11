@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stone Tool Manufacturing Explorer &mdash; 3 Million Years</title>
+<meta name="description" content="Interactive explorer for Paige &amp; Perreault (2023), a dataset of stone tool making techniques across 3 million years of hominin evolution.">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+      integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="header-text">
+      <p class="eyebrow">ANTH 5A &middot; Dataset explorer</p>
+      <h1>Stone Tool Manufacturing over 3 Million Years</h1>
+      <p class="lede">
+        155 archaeological assemblages, primate tool-use observations and flintknapping
+        experiments, each coded for the presence or absence of 33 stone-tool-making
+        techniques. Filter by species, country and technique, then read the result as a
+        chart, a map or a table.
+      </p>
+    </div>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch colour theme">
+      <span class="theme-icon" aria-hidden="true">&#9681;</span><span class="theme-label">Theme</span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap layout" id="main">
+
+  <!-- ───────────────────────── filters ───────────────────────── -->
+  <aside class="filters" aria-label="Dataset filters">
+    <div class="filters-head">
+      <h2>Build a query</h2>
+      <button id="resetBtn" class="btn-reset" type="button">Reset all</button>
+    </div>
+
+    <p class="result-count" id="resultCount" role="status" aria-live="polite">
+      Showing <strong>155</strong> of 155 entries
+    </p>
+
+    <div class="field">
+      <label for="fSpecies">Species attribution</label>
+      <select id="fSpecies" multiple size="6" aria-describedby="hSpecies"></select>
+      <p class="hint" id="hSpecies">Who made it. Ctrl/&#8984;-click for more than one; none selected = all.</p>
+    </div>
+
+    <div class="field">
+      <label for="fCountry">Country</label>
+      <select id="fCountry" multiple size="6" aria-describedby="hCountry"></select>
+      <p class="hint" id="hCountry">Derived from site coordinates &mdash; see <a href="#caveats">the notes</a>.</p>
+    </div>
+
+    <div class="field">
+      <label for="fContinent">Region</label>
+      <select id="fContinent" multiple size="4"></select>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="fTechnique">Technique (procedural unit)</label>
+        <span class="seg" role="group" aria-label="How to combine techniques">
+          <button type="button" class="seg-btn is-on" data-mode="any" id="modeAny">any</button>
+          <button type="button" class="seg-btn" data-mode="all" id="modeAll">all</button>
+        </span>
+      </div>
+      <select id="fTechnique" multiple size="9" aria-describedby="hTech"></select>
+      <p class="hint" id="hTech">
+        This dataset records <em>how tools were made</em>, not named tool types.
+        <button type="button" class="linkish" id="openCodebook">What do these mean?</button>
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="fType">Entry type</label>
+      <select id="fType" multiple size="3"></select>
+    </div>
+
+    <div class="field">
+      <label>Age range (thousands of years ago)</label>
+      <div class="age-readout"><output id="ageOut">all ages</output></div>
+      <label class="sr-only" for="ageMin">Youngest bound</label>
+      <input type="range" id="ageMin" min="0" max="100" value="0">
+      <label class="sr-only" for="ageMax">Oldest bound</label>
+      <input type="range" id="ageMax" min="0" max="100" value="100">
+      <p class="hint">Entries are kept when their published date range overlaps this window.</p>
+    </div>
+
+    <div class="field">
+      <label for="fSearch">Search site or reference</label>
+      <input type="search" id="fSearch" placeholder="e.g. Olduvai, Klasies, Moore">
+    </div>
+  </aside>
+
+  <!-- ───────────────────────── results ───────────────────────── -->
+  <main class="panel">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" id="tab-chart" aria-controls="view-chart" aria-selected="true"  class="tab is-on">Chart</button>
+      <button role="tab" id="tab-map"   aria-controls="view-map"   aria-selected="false" class="tab">Map</button>
+      <button role="tab" id="tab-table" aria-controls="view-table" aria-selected="false" class="tab">Table</button>
+      <button role="tab" id="tab-about" aria-controls="view-about" aria-selected="false" class="tab">Citation &amp; notes</button>
+    </div>
+
+    <!-- chart -->
+    <section role="tabpanel" id="view-chart" aria-labelledby="tab-chart" class="view is-on">
+      <div class="view-controls">
+        <div class="ctl">
+          <label for="chartKind">Chart</label>
+          <select id="chartKind">
+            <option value="techniques">Technique frequency</option>
+            <option value="country">Entries by country</option>
+            <option value="species">Entries by species</option>
+            <option value="continent">Entries by region</option>
+            <option value="scatter">Techniques used vs. age</option>
+            <option value="ages">Age distribution</option>
+          </select>
+        </div>
+        <div class="ctl" id="breakdownCtl">
+          <label for="chartBreak">Compare by</label>
+          <select id="chartBreak">
+            <option value="">(no breakdown)</option>
+            <option value="species">Species</option>
+            <option value="entry_type">Entry type</option>
+            <option value="continent">Region</option>
+            <option value="country">Country</option>
+          </select>
+        </div>
+        <div class="ctl" id="sortCtl">
+          <label for="chartSort">Order</label>
+          <select id="chartSort">
+            <option value="freq">Most frequent first</option>
+            <option value="codebook">Codebook order</option>
+            <option value="group">Grouped by stage</option>
+          </select>
+        </div>
+        <button type="button" class="btn-ghost" id="downloadChart">Download PNG</button>
+      </div>
+
+      <figure class="chart-figure viz-root" data-palette="#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#4a3aa7,#e34948">
+        <figcaption id="chartTitle">Technique frequency</figcaption>
+        <p class="chart-sub" id="chartSub"></p>
+        <div class="chart-box"><canvas id="chart" role="img" aria-label="Chart of the filtered dataset"></canvas></div>
+        <p class="chart-note" id="chartNote"></p>
+      </figure>
+    </section>
+
+    <!-- map -->
+    <section role="tabpanel" id="view-map" aria-labelledby="tab-map" class="view" hidden>
+      <div class="view-controls">
+        <div class="ctl">
+          <label for="mapColour">Colour points by</label>
+          <select id="mapColour">
+            <option value="species">Species</option>
+            <option value="continent">Region</option>
+            <option value="country">Country</option>
+            <option value="entry_type">Entry type</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <label for="mapSize">Point size</label>
+          <select id="mapSize">
+            <option value="fixed">Uniform</option>
+            <option value="pu_count">Number of techniques</option>
+          </select>
+        </div>
+        <button type="button" class="btn-ghost" id="fitBtn">Zoom to results</button>
+        <a class="btn-ghost" href="stone_tools.kml" download>Download KML</a>
+      </div>
+      <div id="map" role="application" aria-label="Map of filtered sites"></div>
+      <div class="map-foot">
+        <div id="mapLegend" class="legend"></div>
+        <p class="chart-note" id="mapNote"></p>
+      </div>
+    </section>
+
+    <!-- table -->
+    <section role="tabpanel" id="view-table" aria-labelledby="tab-table" class="view" hidden>
+      <div class="view-controls">
+        <p class="chart-note" id="tableNote"></p>
+        <button type="button" class="btn-ghost" id="downloadCsv">Download filtered CSV</button>
+      </div>
+      <div class="table-scroll">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th scope="col" data-sort="site">Site</th>
+              <th scope="col" data-sort="country">Country</th>
+              <th scope="col" data-sort="species">Species</th>
+              <th scope="col" data-sort="ka_old" class="num">Age (ka)</th>
+              <th scope="col" data-sort="pu_count" class="num">Techniques</th>
+              <th scope="col" data-sort="source">Reference</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- about -->
+    <section role="tabpanel" id="view-about" aria-labelledby="tab-about" class="view about" hidden>
+
+      <div class="cite-card">
+        <h2>How to cite this dataset</h2>
+        <p class="cite-formatted" id="citeText">
+          Paige, J. and Perreault, C. 2023. A Dataset Describing the Manufacturing of Stone
+          Tools Over 3 Million Years. <em>Journal of Open Archaeology Data</em>, 11: 12, pp. 1&ndash;7.
+          DOI: <a href="https://doi.org/10.5334/joad.114">https://doi.org/10.5334/joad.114</a>
+        </p>
+        <div class="cite-actions">
+          <a class="btn-primary" href="Paige_Perreault_2023_DatasetManufacture.pdf" target="_blank" rel="noopener">
+            Read the paper (PDF)
+          </a>
+          <button type="button" class="btn-ghost" data-copy="apa">Copy APA</button>
+          <button type="button" class="btn-ghost" data-copy="bibtex">Copy BibTeX</button>
+          <button type="button" class="btn-ghost" data-copy="ris">Copy RIS</button>
+        </div>
+        <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+
+        <dl class="cite-meta">
+          <dt>Authors</dt>
+          <dd>Jonathan Paige (University of Missouri; UT San Antonio) &middot;
+              Charles Perreault (Arizona State University)</dd>
+          <dt>Published</dt><dd>30 November 2023, Journal of Open Archaeology Data 11(12)</dd>
+          <dt>Article DOI</dt>
+          <dd><a href="https://doi.org/10.5334/joad.114">10.5334/joad.114</a></dd>
+          <dt>Dataset DOI</dt>
+          <dd><a href="https://doi.org/10.5281/zenodo.7847839">10.5281/zenodo.7847839</a> (Zenodo, v1.0.0)</dd>
+          <dt>Codebook DOI</dt>
+          <dd><a href="https://doi.org/10.5281/zenodo.7847876">10.5281/zenodo.7847876</a> (Zenodo, v1.0.0)</dd>
+          <dt>Licence</dt>
+          <dd>Creative Commons Attribution 4.0 International
+              (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &mdash;
+              reuse freely, with credit to the authors.</dd>
+          <dt>Funding</dt>
+          <dd>The Leakey Foundation; School of Human Evolution and Social Change and the
+              Graduate and Professional Association, Arizona State University.</dd>
+        </dl>
+      </div>
+
+      <div class="about-grid">
+        <section>
+          <h2>What is in the dataset</h2>
+          <p>
+            Each of the 155 rows is <strong>one technology or one set of technologies</strong>
+            described in a published report, not one artefact and not one site. Where a paper
+            described several distinct reduction sequences, each was coded separately and a
+            further row records everything present across the whole assemblage &mdash; those
+            summary rows are marked <em>Whole assemblage</em> in the table.
+          </p>
+          <ul class="facts">
+            <li><strong>145</strong> archaeological entries, from 100 sites</li>
+            <li><strong>5</strong> non-human primate tool-making behaviours</li>
+            <li><strong>5</strong> technologies produced in controlled flintknapping experiments</li>
+            <li><strong>33</strong> procedural units coded present/absent in every entry</li>
+            <li>Covers ~3.3 million years ago to the 19th century AD</li>
+          </ul>
+        </section>
+
+        <section id="caveats">
+          <h2>Read the data carefully</h2>
+          <ul class="facts">
+            <li>
+              <strong>&ldquo;Technique&rdquo; is not &ldquo;tool type&rdquo;.</strong> The dataset codes
+              <em>procedural units</em> &mdash; the manufacturing steps a knapper took (faceting a
+              platform, striking a burin spall, retouching a tang). It does not code named
+              typologies such as &ldquo;handaxe&rdquo; or &ldquo;Levallois point&rdquo;. The
+              <em>Technology described</em> field in the table often names those, in the coder's words.
+            </li>
+            <li>
+              <strong>Country is not in the published dataset.</strong> It was added here by
+              looking up each site's coordinates against world boundaries. 19 sites sit just
+              offshore of the coastline used and were assigned to the nearest country; these are
+              flagged <em>approx.</em> Modern borders are also a poor fit for deep prehistory
+              &mdash; treat country as a convenience for searching, not as an analytical unit.
+            </li>
+            <li>
+              <strong>Coordinates are approximate.</strong> The file used here has had site
+              locations slightly displaced, so points show the right region but not an exact
+              findspot.
+            </li>
+            <li>
+              <strong>Absence is not absence of evidence.</strong> A 0 means the technique was
+              not reported in that publication. Richer, better-published assemblages tend to
+              show more techniques, and reports tend to dwell on the showier pieces. As the
+              authors note, common practices such as bipolar percussion are probably
+              under-represented.
+            </li>
+            <li>
+              <strong>10 entries have no coordinates</strong> (the primate and experimental
+              entries) and so never appear on the map, though they do appear in charts and the table.
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <section>
+        <h2>The 33 procedural units</h2>
+        <p class="muted">Definitions are quoted from Table 1 of the paper.</p>
+        <div id="codebook" class="codebook"></div>
+      </section>
+
+      <section>
+        <h2>Files in this repository</h2>
+        <ul class="facts">
+          <li><a href="Paige_Perreault_2023_DatasetManufacture.pdf">Paige_Perreault_2023_DatasetManufacture.pdf</a> &mdash; the published paper</li>
+          <li><a href="data/stone_tools.csv">data/stone_tools.csv</a> &mdash; the tidied dataset, one row per entry</li>
+          <li><a href="data/stone_tools.json">data/stone_tools.json</a> &mdash; the same data plus the codebook, used by this page</li>
+          <li><a href="stone_tools.kml">stone_tools.kml</a> &mdash; all 145 mapped entries for Google Earth or QGIS</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>
+      Data: Paige &amp; Perreault 2023, <a href="https://doi.org/10.5334/joad.114">10.5334/joad.114</a>,
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+      Basemap tiles &copy; <a href="https://www.esri.com/">Esri</a> and the GIS user community.
+    </p>
+    <p class="muted">This teaching page is not affiliated with the authors or the journal.</p>
+  </div>
+</footer>
+
+<!-- codebook modal -->
+<dialog id="codebookModal">
+  <div class="modal-head">
+    <h2>The 33 procedural units</h2>
+    <button type="button" id="closeCodebook" class="btn-ghost">Close</button>
+  </div>
+  <div id="codebookModalBody" class="codebook"></div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+        integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+        integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
