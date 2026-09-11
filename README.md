@@ -42,7 +42,7 @@ Each of the 155 rows is **one technology or one set of technologies** reported i
 | Path | What it is |
 |---|---|
 | `index.html`, `assets/` | The site itself |
-| `data/stone_tools.csv` | Tidied dataset, one row per entry, 33 technique columns |
+| `data/stone_tools.csv` | Tidied dataset, one row per entry, 33 technique columns, plus `technology` |
 | `data/stone_tools.json` | The same data plus the codebook; what the page loads |
 | `stone_tools.kml` | All 145 mapped entries for Google Earth or QGIS |
 | `Paige_Perreault_2023_DatasetManufacture.pdf` | The published paper |
@@ -58,15 +58,37 @@ of them.
 
 ---
 
-## Two things the page adds to the published data
+## Three things the page adds to the published data
 
-Both are flagged in the app's *Citation & notes* tab, and neither is the authors' work:
+All are flagged in the app's *Citation & notes* tab, and none is the authors' work:
 
-1. **Country and region** are not in the published dataset. They were derived here by testing
+1. **Technology** (industry attribution) is not in the published dataset. Paige & Perreault code
+   procedural units, not technocomplexes — only four of the 155 rows name an industry at all,
+   in the coder's free text. The rest were attributed here from site, published age and the
+   description of the artefacts, using six values:
+
+   | Value | n | What it means |
+   |---|---|---|
+   | Lomekwian | 2 | Lomekwi 3, 3.3 Ma — explicitly pre-Oldowan |
+   | Oldowan | 11 | Bokol Dora 1, EG12/Gona, Lokalalei 2c, Kanjera, NY 18 Nyabusosi |
+   | Oldowan (probable) | 2 | Olduvai Bed II BK — usually Developed Oldowan, but coded here with no bifacial retouch |
+   | Acheulean | 12 | Peninj, Olorgesailie, Canteen Koppie, Gesher Benot Ya'aqov, Hugub, Boxgrove, Torre in Pietra M |
+   | Acheulean (probable) | 3 | Garba IVd (the contested ~1.7 Ma early-Acheulean claim) and one experimental handaxe replication |
+   | Other | 125 | Everything else |
+
+   **`Other` is not `unknown`.** It includes assemblages that contain bifaces without being
+   Acheulean — the Acheulo-Yabrudian at Qesem Cave, the Fauresmith at Kathu Pan 1, and Nor
+   Geghi 1. The full reasoning, entry by entry, is commented in `build/build_data.py`.
+
+   A useful classroom result falls straight out of the coding: **bifacial retouch is recorded in
+   0 of the 15 Lomekwian and Oldowan entries, and in 10 of the 12 Acheulean ones.** Set *Chart* to
+   *Technique frequency* and *Compare by* to *Technology* to see it.
+
+2. **Country and region** are not in the published dataset. They were derived here by testing
    each site's coordinates against Natural Earth country boundaries (1:50m). Nineteen sites fall
    just offshore of that coastline and were assigned to the nearest country; those are marked
    `country_approx` in the CSV and *approx.* in the app.
-2. **Some text was repaired.** A handful of cells in the workbook contained UTF-8 that had been
+3. **Some text was repaired.** A handful of cells in the workbook contained UTF-8 that had been
    decoded as cp1252 somewhere upstream (`â€™` where `’` was meant). The build re-encodes these
    where the round-trip is lossless and leaves the text otherwise untouched.
 

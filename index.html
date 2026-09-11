@@ -53,6 +53,13 @@
     </div>
 
     <div class="field">
+      <label for="fTechnology">Technology</label>
+      <select id="fTechnology" multiple size="6" aria-describedby="hTech0"></select>
+      <p class="hint" id="hTech0">Industry attribution added for teaching &mdash; <strong>not</strong> part of
+        the published dataset. See <a href="#caveats">the notes</a>.</p>
+    </div>
+
+    <div class="field">
       <label for="fCountry">Country</label>
       <select id="fCountry" multiple size="6" aria-describedby="hCountry"></select>
       <p class="hint" id="hCountry">Derived from site coordinates &mdash; see <a href="#caveats">the notes</a>.</p>
@@ -117,6 +124,7 @@
             <option value="techniques">Technique frequency</option>
             <option value="country">Entries by country</option>
             <option value="species">Entries by species</option>
+            <option value="technology">Entries by technology</option>
             <option value="continent">Entries by region</option>
             <option value="scatter">Techniques used vs. age</option>
             <option value="ages">Age distribution</option>
@@ -127,6 +135,7 @@
           <select id="chartBreak">
             <option value="">(no breakdown)</option>
             <option value="species">Species</option>
+            <option value="technology">Technology</option>
             <option value="entry_type">Entry type</option>
             <option value="continent">Region</option>
             <option value="country">Country</option>
@@ -158,6 +167,7 @@
           <label for="mapColour">Colour points by</label>
           <select id="mapColour">
             <option value="species">Species</option>
+            <option value="technology">Technology</option>
             <option value="continent">Region</option>
             <option value="country">Country</option>
             <option value="entry_type">Entry type</option>
@@ -193,6 +203,7 @@
               <th scope="col" data-sort="site">Site</th>
               <th scope="col" data-sort="country">Country</th>
               <th scope="col" data-sort="species">Species</th>
+              <th scope="col" data-sort="technology">Technology</th>
               <th scope="col" data-sort="ka_old" class="num">Age (ka)</th>
               <th scope="col" data-sort="pu_count" class="num">Techniques</th>
               <th scope="col" data-sort="source">Reference</th>
@@ -260,6 +271,8 @@
             <li><strong>5</strong> technologies produced in controlled flintknapping experiments</li>
             <li><strong>33</strong> procedural units coded present/absent in every entry</li>
             <li>Covers ~3.3 million years ago to the 19th century AD</li>
+            <li><em>Technology</em>, <em>Country</em> and <em>Region</em> were added for this page
+                and are not the authors' coding</li>
           </ul>
         </section>
 
@@ -272,6 +285,20 @@
               platform, striking a burin spall, retouching a tang). It does not code named
               typologies such as &ldquo;handaxe&rdquo; or &ldquo;Levallois point&rdquo;. The
               <em>Technology described</em> field in the table often names those, in the coder's words.
+            </li>
+            <li>
+              <strong>Technology is not in the published dataset either &mdash; it is our reading.</strong>
+              Only four of the 155 rows name an industry at all, in the coder's free text
+              (&ldquo;Oldowan&rdquo; at EG12 and NY 18 Nyabusosi, &ldquo;Acheulean handaxe&rdquo; in one
+              experiment). The rest of the <em>Technology</em> labels were assigned here from the site,
+              its published age and the description of the artefacts. <em>Probable</em> marks the
+              calls that are genuinely arguable: Olduvai Bed II BK, usually read as Developed Oldowan
+              but coded here with no bifacial retouch; and Garba IVd, the contested ~1.7 Ma claim for
+              an early Acheulean. <em>Other</em> is not &ldquo;unknown&rdquo; &mdash; it includes
+              assemblages that do contain bifaces without being Acheulean, such as the
+              Acheulo-Yabrudian at Qesem Cave, the Fauresmith at Kathu Pan 1, and Nor Geghi 1.
+              Disagree with a call and you are doing archaeology correctly; the reasoning is in
+              <code>build/build_data.py</code>.
             </li>
             <li>
               <strong>Country is not in the published dataset.</strong> It was added here by

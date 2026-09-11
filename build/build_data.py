@@ -64,6 +64,66 @@ GROUP_OF = {n: g for g, nums in GROUPS.items() for n in nums}
 
 PRIMATES = ("S. libidinosus", "P. troglodytes", "M. fascicularis aurea")
 
+# ---------------------------------------------------------------------------
+# Technology (INTERPRETED - not part of the published dataset)
+#
+# Paige & Perreault code procedural units, not technocomplexes. Only four rows
+# name an industry at all in the free-text Descr. field ("Oldowan" at EG12 and
+# NY 18 Nyabusosi, "Acheulean handaxe" in the Moore & Perston experiment).
+# Everything else here is attributed from the site, its published age and the
+# coder's description of the artefacts.
+#
+#   Lomekwian           Harmand et al. named the Lomekwi 3 industry; explicitly
+#                       pre-Oldowan.
+#   Oldowan             Canonical Oldowan localities, or the Descr. says so.
+#   Oldowan (probable)  Attribution contested or the entry describes only part
+#                       of the assemblage.
+#   Acheulean           Canonical Acheulean localities whose Descr. names a
+#                       diagnostic large cutting tool, handaxe or cleaver.
+#   Acheulean (probable)Same, but the attribution is argued rather than settled.
+#   Other               Everything else - including assemblages that contain
+#                       bifaces but are not Acheulean (Acheulo-Yabrudian at
+#                       Qesem, Fauresmith at Kathu Pan 1, Nor Geghi 1), all MSA
+#                       / Upper Palaeolithic / Holocene entries, and primate
+#                       tool use.
+#
+# Keyed by row id (1-based, matching the workbook order).
+# ---------------------------------------------------------------------------
+TECHNOLOGY = {}
+
+
+def _tag(label, ids):
+    for i in ids:
+        TECHNOLOGY[i] = label
+
+
+_tag("Lomekwian", [25, 26])                               # Lomekwi 3, 3.3 Ma
+_tag("Oldowan", [
+    93, 94,      # Bokol Dora 1 - Braun et al. 2019, "earliest known Oldowan"
+    6, 7, 8,     # EG12, Gona - Descr. says "Oldowan"
+    27, 28,      # Lokalalei 2c - Delagnes & Roche 2005
+    29, 30,      # Kanjera - Plummer & Bishop 2016
+    57, 58,      # NY 18 Nyabusosi - Descr. says "Oldowan"
+])
+_tag("Oldowan (probable)", [31, 32])                      # Olduvai Bed II BK
+_tag("Acheulean", [
+    49, 50,      # RHS-Mugulud, Peninj - "large cutting tool"
+    33,          # Olorgesailie - "biface with invasive scarring"
+    21,          # Canteen Koppie - Victoria West cleaver
+    18, 19, 20,  # Gesher Benot Ya'aqov - "handaxes from kombewa flakes"
+    55, 56,      # Hugub KK51 - "large cutting tool on a flake"
+    37,          # Boxgrove - "handaxes with tranchet sharpening"
+    51, 52,      # Torre in Pietra level M - "large cutting tool"
+])
+_tag("Acheulean (probable)", [
+    45, 46,      # Garba IVd - the contested ~1.7 Ma "older origin" case
+    100,         # Moore & Perston experimental Acheulean handaxe (a replication,
+                 # not an assemblage; entry_type marks it Experimental)
+])
+
+TECHNOLOGY_ORDER = ["Lomekwian", "Oldowan", "Oldowan (probable)",
+                    "Acheulean", "Acheulean (probable)", "Other"]
+
 
 def norm_species(s):
     s = (s or "").strip()
@@ -143,6 +203,7 @@ def main():
             "site": g("Sitename") or "",
             "description": g("Descr.") or "",
             "species": norm_species(g("Species.attribution")),
+            "technology": TECHNOLOGY.get(i + 1, "Other"),
             "entry_type": entry_type(g("Arch"), g("Species.attribution")),
             "single_chain": "Single sequence" if sc == "yes" else "Whole assemblage",
             "country": country,
@@ -162,7 +223,8 @@ def main():
 
     os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
 
-    cols = ["id", "source", "site", "description", "species", "entry_type", "single_chain",
+    cols = ["id", "source", "site", "description", "species", "technology",
+            "entry_type", "single_chain",
             "country", "iso_a2", "continent", "country_approx", "lat", "lon",
             "ka_young", "ka_old", "ka_mid", "date_citation", "pu_count"] + PU_KEYS
     csv_path = os.path.join(ROOT, "data", "stone_tools.csv")
@@ -197,6 +259,7 @@ def main():
             for (_c, n, lab, d) in PU
         ],
         "groups": list(GROUPS.keys()),
+        "technology_order": TECHNOLOGY_ORDER,
         "n_records": len(recs),
     }
     with open(os.path.join(ROOT, "data", "stone_tools.json"), "w", encoding="utf-8") as fh:
@@ -206,7 +269,7 @@ def main():
 
     print("records: %d | with coordinates: %d" % (len(recs), sum(1 for r in recs if r["lat"] is not None)))
     print("countries: %d" % len({r["country"] for r in recs if r["country"]}))
-    for k in ("continent", "entry_type", "species"):
+    for k in ("continent", "entry_type", "technology"):
         print("%-11s %s" % (k, dict(collections.Counter(r[k] for r in recs).most_common())))
     print("country resolved by nearest coastline: %d" % sum(1 for r in recs if r["country_approx"]))
 
@@ -306,6 +369,7 @@ def placemark(r, pu_lookup):
         ("Country", (r["country"] or "-") + (" (nearest, approx.)" if r["country_approx"] else "")),
         ("Entry type", r["entry_type"]),
         ("Species attribution", r["species"]),
+        ("Technology (interpreted)", r["technology"]),
         ("Age", age_label(r)),
         ("Basis for date", r["date_citation"] or "-"),
         ("Scope of entry", r["single_chain"]),
@@ -330,6 +394,7 @@ def placemark(r, pu_lookup):
             '      <ExtendedData>\n'
             '        <Data name="Source"><value>%s</value></Data>\n'
             '        <Data name="Species"><value>%s</value></Data>\n'
+            '        <Data name="Technology"><value>%s</value></Data>\n'
             '        <Data name="Country"><value>%s</value></Data>\n'
             '        <Data name="Entry type"><value>%s</value></Data>\n'
             '        <Data name="KA young"><value>%s</value></Data>\n'
@@ -340,7 +405,8 @@ def placemark(r, pu_lookup):
             '      <Point><coordinates>%.6f,%.6f,0</coordinates></Point>\n'
             '    </Placemark>'
             % (esc(r["site"]), STYLE_ID[r["entry_type"]], desc, esc(r["source"]),
-               esc(r["species"]), esc(r["country"]), esc(r["entry_type"]),
+               esc(r["species"]), esc(r["technology"]), esc(r["country"]),
+               esc(r["entry_type"]),
                esc(r["ka_young"]), esc(r["ka_old"]), r["pu_count"], ext,
                r["lon"], r["lat"]))
 

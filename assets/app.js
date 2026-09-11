@@ -10,7 +10,7 @@
   var tableSort = { key: "ka_old", dir: -1 };
 
   var state = {
-    species: [], country: [], continent: [], technique: [], type: [],
+    species: [], technology: [], country: [], continent: [], technique: [], type: [],
     techMode: "any", ageMin: null, ageMax: null, search: ""
   };
 
@@ -81,9 +81,15 @@
       if (v === null || v === "") { if (!opts.keepNull) return; v = "(none)"; }
       counts[v] = (counts[v] || 0) + 1;
     });
-    return Object.keys(counts).sort(function (a, b) {
-      return opts.byCount ? (counts[b] - counts[a] || a.localeCompare(b)) : a.localeCompare(b);
-    }).map(function (v) { return { value: v, n: counts[v] }; });
+    var keys = Object.keys(counts);
+    if (opts.order) {
+      keys.sort(function (a, b) { return opts.order.indexOf(a) - opts.order.indexOf(b); });
+    } else {
+      keys.sort(function (a, b) {
+        return opts.byCount ? (counts[b] - counts[a] || a.localeCompare(b)) : a.localeCompare(b);
+      });
+    }
+    return keys.map(function (v) { return { value: v, n: counts[v] }; });
   }
 
   function fillSelect(el, items, labeller) {
@@ -98,6 +104,7 @@
 
   function buildFilters() {
     fillSelect($("fSpecies"), uniq("species", { byCount: true }));
+    fillSelect($("fTechnology"), uniq("technology", { order: META.technology_order }));
     fillSelect($("fCountry"), uniq("country", { byCount: true }));
     fillSelect($("fContinent"), uniq("continent", { byCount: true }));
     fillSelect($("fType"), uniq("entry_type", { byCount: true }));
@@ -129,6 +136,7 @@
     var q = s.search.trim().toLowerCase();
     return DATA.filter(function (r) {
       if (s.species.length && s.species.indexOf(r.species) < 0) return false;
+      if (s.technology.length && s.technology.indexOf(r.technology) < 0) return false;
       if (s.country.length && s.country.indexOf(r.country) < 0) return false;
       if (s.continent.length && s.continent.indexOf(r.continent) < 0) return false;
       if (s.type.length && s.type.indexOf(r.entry_type) < 0) return false;
@@ -163,7 +171,8 @@
 
   /* =============================== wiring =============================== */
   function wireUp() {
-    [["fSpecies", "species"], ["fCountry", "country"], ["fContinent", "continent"],
+    [["fSpecies", "species"], ["fTechnology", "technology"],
+     ["fCountry", "country"], ["fContinent", "continent"],
      ["fTechnique", "technique"], ["fType", "type"]].forEach(function (pair) {
       $(pair[0]).addEventListener("change", function () {
         state[pair[1]] = readSelect(this);
@@ -200,13 +209,13 @@
     aMax.addEventListener("input", onAge);
 
     $("resetBtn").addEventListener("click", function () {
-      ["fSpecies", "fCountry", "fContinent", "fTechnique", "fType"].forEach(function (id) {
+      ["fSpecies", "fTechnology", "fCountry", "fContinent", "fTechnique", "fType"].forEach(function (id) {
         Array.prototype.forEach.call($(id).options, function (o) { o.selected = false; });
       });
       $("fSearch").value = "";
       aMin.value = 0; aMax.value = 100;
       $("ageOut").textContent = "all ages";
-      state = { species: [], country: [], continent: [], technique: [], type: [],
+      state = { species: [], technology: [], country: [], continent: [], technique: [], type: [],
                 techMode: state.techMode, ageMin: null, ageMax: null, search: "" };
       render();
     });
@@ -306,6 +315,7 @@
   function describeQuery() {
     var bits = [];
     if (state.species.length) bits.push(state.species.join(", "));
+    if (state.technology.length) bits.push(state.technology.join(", "));
     if (state.country.length) bits.push(state.country.join(", "));
     if (state.continent.length) bits.push(state.continent.join(", "));
     if (state.type.length) bits.push(state.type.join(", "));
@@ -324,10 +334,26 @@
     return (v === null || v === "") ? "Unknown" : v;
   }
 
+  // Technology is an ordered scheme (Lomekwian -> Oldowan -> ... -> Other), so its
+  // categories keep that order everywhere instead of being ranked by count.
+  function orderFor(key) {
+    return key === "technology" ? META.technology_order : null;
+  }
+
+  function sortCats(keys, key, counts) {
+    var ord = orderFor(key);
+    if (ord) {
+      return keys.slice().sort(function (a, b) { return ord.indexOf(a) - ord.indexOf(b); });
+    }
+    return keys.slice().sort(function (a, b) {
+      return counts[b] - counts[a] || a.localeCompare(b);
+    });
+  }
+
   function topGroups(rows, key, max) {
     var c = {};
     rows.forEach(function (r) { var v = groupValue(r, key); c[v] = (c[v] || 0) + 1; });
-    var keys = Object.keys(c).sort(function (a, b) { return c[b] - c[a] || a.localeCompare(b); });
+    var keys = sortCats(Object.keys(c), key, c);
     if (keys.length <= max) return { keys: keys, other: false };
     return { keys: keys.slice(0, max - 1), other: true };
   }
@@ -368,6 +394,17 @@
 
     $("chartTitle").textContent = cfg.title;
     $("chartNote").textContent = cfg.note;
+
+    // Horizontal bar charts need room per bar, or a breakdown squeezes them to
+    // hairlines. Give each bar ~5px and each category group a little padding.
+    var cats = (cfg.config.data.labels || []).length;
+    var series = cfg.config.data.datasets.length;
+    if (cfg.config.options.indexAxis === "y" && cats) {
+      box.style.height = Math.max(420, Math.min(2600, cats * (series * 5 + 12) + 90)) + "px";
+    } else {
+      box.style.height = "";
+    }
+
     chart = new Chart(canvas.getContext("2d"), cfg.config);
   }
 
@@ -521,12 +558,10 @@
 
   /* --- simple category counts ---------------------------------------- */
   function cfgCategory(rows, kind, brk) {
-    var key = kind === "country" ? "country" : kind === "species" ? "species" : "continent";
+    var key = { country: "country", species: "species", technology: "technology" }[kind] || "continent";
     var counts = {};
     rows.forEach(function (r) { var v = groupValue(r, key); counts[v] = (counts[v] || 0) + 1; });
-    var labels = Object.keys(counts).sort(function (a, b) {
-      return counts[b] - counts[a] || a.localeCompare(b);
-    });
+    var labels = sortCats(Object.keys(counts), key, counts);
 
     var palette = SERIES();
     var datasets, legend = false;
@@ -562,14 +597,19 @@
     }
 
     var titleMap = { country: "Entries by country", species: "Entries by species",
-                     continent: "Entries by region" };
+                     technology: "Entries by technology", continent: "Entries by region" };
     var noteMap = {
       country: "Country was derived here from site coordinates and is not part of the published " +
                "dataset; modern borders are a rough guide only for deep prehistory.",
       species: "“Unattributed” marks entries the original publications did not assign to a " +
                "hominin species — common for older or fragmentary assemblages.",
       continent: "Coverage follows the published literature, so it is patchy rather than a sample " +
-                 "of everything that exists."
+                 "of everything that exists.",
+      technology: "Industry attribution is not in the published dataset — it was added for this " +
+                  "page from site, age and the coder's description, and only four rows name an " +
+                  "industry themselves. “Other” is not “unknown”: it holds every " +
+                  "entry outside the Oldowan–Acheulean sequence, including biface-bearing " +
+                  "assemblages such as Qesem and Kathu Pan 1."
     };
 
     return {
@@ -750,7 +790,8 @@
   }
 
   function prettyKey(k) {
-    return { species: "species", entry_type: "entry type", continent: "region", country: "country" }[k] || k;
+    return { species: "species", technology: "technology", entry_type: "entry type",
+             continent: "region", country: "country" }[k] || k;
   }
   function round1(v) { return Math.round(v * 10) / 10; }
   function wrapText(s, n) {
@@ -810,9 +851,7 @@
 
     var counts = {};
     mapped.forEach(function (r) { var v = groupValue(r, key); counts[v] = (counts[v] || 0) + 1; });
-    var keys = Object.keys(counts).sort(function (a, b) {
-      return counts[b] - counts[a] || a.localeCompare(b);
-    }).slice(0, 8);
+    var keys = sortCats(Object.keys(counts), key, counts).slice(0, 8);
 
     mapped.forEach(function (r) {
       var v = groupValue(r, key);
@@ -867,6 +906,7 @@
       ["Country", (r.country || "—") + (r.country_approx ? " (approx.)" : "")],
       ["Age", ageLabel(r)],
       ["Species", r.species],
+      ["Technology", r.technology + " †"],
       ["Entry type", r.entry_type],
       ["Scope", r.single_chain],
       ["Techniques", r.pu_count + " of 33"]
@@ -879,7 +919,9 @@
       "<dl>" + rowsHtml + "</dl>" +
       (r.description ? '<p class="pop-tech"><b>Technology described</b>' + esc(r.description) + "</p>" : "") +
       '<p class="pop-tech"><b>Procedural units present</b>' +
-      (present.length ? esc(present.join(", ")) : "none recorded") + "</p></div>";
+      (present.length ? esc(present.join(", ")) : "none recorded") + "</p>" +
+      '<p class="pop-foot">† Technology is an interpretation added for this page, not part ' +
+      "of the published dataset.</p></div>";
   }
 
   /* =============================== table =============================== */
@@ -912,6 +954,7 @@
           (r.country_approx ? '<span class="tag">approx.</span>' : "") +
           '<span class="td-sub">' + esc(r.continent || "no coordinates") + "</span></td>" +
         "<td>" + esc(r.species) + '<span class="td-sub">' + esc(r.entry_type) + "</span></td>" +
+        "<td>" + esc(r.technology) + "</td>" +
         '<td class="num">' + esc(ageLabel(r)) + "</td>" +
         '<td class="num">' + r.pu_count + "</td>" +
         "<td>" + esc(r.source) + "</td>";
@@ -923,7 +966,8 @@
 
   function downloadCsv() {
     var rows = applyFilters();
-    var cols = ["id", "site", "source", "description", "species", "entry_type", "single_chain",
+    var cols = ["id", "site", "source", "description", "species", "technology",
+                "entry_type", "single_chain",
                 "country", "continent", "country_approx", "lat", "lon",
                 "ka_young", "ka_old", "date_citation", "pu_count"]
                .concat(PUS.map(function (p) { return p.key; }));
