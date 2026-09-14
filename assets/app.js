@@ -505,7 +505,8 @@
     else cfg = cfgCategory(rows, kind, brk);
 
     $("chartTitle").textContent = cfg.title;
-    $("chartNote").textContent = cfg.note;
+    if (cfg.noteHtml) $("chartNote").innerHTML = cfg.noteHtml;
+    else $("chartNote").textContent = cfg.note;
 
     // Horizontal bar charts need room per bar, or a breakdown squeezes them to
     // hairlines. Give each bar ~5px and each category group a little padding.
@@ -574,7 +575,7 @@
 
     var labels = order.map(function (p) { return p.label; });
     var palette = SERIES();
-    var datasets, note, legend = false;
+    var datasets, note, noteHtml = null, legend = false;
 
     if (brk) {
       var g = topGroups(rows, brk, 8);
@@ -616,10 +617,17 @@
       }];
       note = "Percentage of the " + rows.length + " filtered entries in which each technique was " +
              "recorded as present. A low bar can mean the technique was rare, or simply that it " +
-             "is rarely reported. Bars use a violet scale for the earliest industry the " +
-             "technique is recorded in — darkest Lomekwian, then Oldowan, then Acheulean, " +
-             "with grey for techniques that appear only in later assemblages. That scale is " +
-             "deliberately separate from the colours used on the map.";
+             "is rarely reported.";
+      var swatch = function (label, v) {
+        return '<b style="color:' + css(v) + '">' + label + "</b>";
+      };
+      noteHtml = "Percentage of the " + rows.length + " filtered entries in which each technique " +
+        "was recorded as present. A low bar can mean the technique was rare, or simply that it " +
+        "is rarely reported. Bars use a violet scale for the earliest industry the technique is " +
+        "recorded in — darkest " + swatch("Lomekwian", "--ind-1") + ", then " +
+        swatch("Oldowan", "--ind-2") + ", then " + swatch("Acheulean", "--ind-3") + ", with " +
+        swatch("grey", "--ind-none") + " for techniques that appear only in later assemblages. " +
+        "That scale is deliberately separate from the colours used on the map.";
     }
 
     var counts = {};
@@ -630,6 +638,7 @@
     return {
       title: "Technique frequency" + (brk ? " by " + prettyKey(brk) : ""),
       note: note,
+      noteHtml: noteHtml,
       config: {
         type: "bar",
         data: { labels: labels, datasets: datasets },
