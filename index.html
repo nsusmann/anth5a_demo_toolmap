@@ -124,8 +124,8 @@
   <!-- ───────────────────────── results ───────────────────────── -->
   <main class="panel">
     <div class="tabs" role="tablist" aria-label="Views">
-      <button role="tab" id="tab-chart" aria-controls="view-chart" aria-selected="true"  class="tab is-on">Chart</button>
-      <button role="tab" id="tab-map"   aria-controls="view-map"   aria-selected="false" class="tab">Map</button>
+      <button role="tab" id="tab-map"   aria-controls="view-map"   aria-selected="true"  class="tab is-on">Map</button>
+      <button role="tab" id="tab-chart" aria-controls="view-chart" aria-selected="false" class="tab">Chart</button>
       <button role="tab" id="tab-table" aria-controls="view-table" aria-selected="false" class="tab">Table</button>
       <button role="tab" id="tab-about" aria-controls="view-about" aria-selected="false" class="tab">Citation &amp; notes</button>
     </div>
@@ -133,8 +133,49 @@
     <!-- reference photographs, shown whenever a technology is in play -->
     <section id="techFigures" class="tech-figures" aria-label="Reference photographs" hidden></section>
 
+    <!-- map -->
+    <section role="tabpanel" id="view-map" aria-labelledby="tab-map" class="view is-on">
+      <div class="view-controls">
+        <div class="ctl">
+          <label for="mapColour">Colour points by</label>
+          <select id="mapColour">
+            <option value="species">Species</option>
+            <option value="technology">Technology</option>
+            <option value="continent">Region</option>
+            <option value="country">Country</option>
+            <option value="entry_type">Entry type</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <label for="mapShape">Shape points by</label>
+          <select id="mapShape">
+            <option value="">(all circles)</option>
+            <option value="technology">Technology</option>
+            <option value="species">Species</option>
+            <option value="continent">Region</option>
+            <option value="entry_type">Entry type</option>
+            <option value="single_chain">Scope of entry</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <label for="mapSize">Point size</label>
+          <select id="mapSize">
+            <option value="fixed">Uniform</option>
+            <option value="pu_count">Number of techniques</option>
+          </select>
+        </div>
+        <button type="button" class="btn-ghost" id="fitBtn">Zoom to results</button>
+        <a class="btn-ghost" href="stone_tools.kml" download>Download KML</a>
+      </div>
+      <div id="map" role="application" aria-label="Map of filtered sites"></div>
+      <div class="map-foot">
+        <div id="mapLegend" class="legend"></div>
+        <p class="chart-note" id="mapNote"></p>
+      </div>
+    </section>
+
     <!-- chart -->
-    <section role="tabpanel" id="view-chart" aria-labelledby="tab-chart" class="view is-on">
+    <section role="tabpanel" id="view-chart" aria-labelledby="tab-chart" class="view" hidden>
       <div class="view-controls">
         <div class="ctl">
           <label for="chartKind">Chart</label>
@@ -176,47 +217,6 @@
         <div class="chart-box"><canvas id="chart" role="img" aria-label="Chart of the filtered dataset"></canvas></div>
         <p class="chart-note" id="chartNote"></p>
       </figure>
-    </section>
-
-    <!-- map -->
-    <section role="tabpanel" id="view-map" aria-labelledby="tab-map" class="view" hidden>
-      <div class="view-controls">
-        <div class="ctl">
-          <label for="mapColour">Colour points by</label>
-          <select id="mapColour">
-            <option value="species">Species</option>
-            <option value="technology">Technology</option>
-            <option value="continent">Region</option>
-            <option value="country">Country</option>
-            <option value="entry_type">Entry type</option>
-          </select>
-        </div>
-        <div class="ctl">
-          <label for="mapShape">Shape points by</label>
-          <select id="mapShape">
-            <option value="">(all circles)</option>
-            <option value="technology">Technology</option>
-            <option value="species">Species</option>
-            <option value="continent">Region</option>
-            <option value="entry_type">Entry type</option>
-            <option value="single_chain">Scope of entry</option>
-          </select>
-        </div>
-        <div class="ctl">
-          <label for="mapSize">Point size</label>
-          <select id="mapSize">
-            <option value="fixed">Uniform</option>
-            <option value="pu_count">Number of techniques</option>
-          </select>
-        </div>
-        <button type="button" class="btn-ghost" id="fitBtn">Zoom to results</button>
-        <a class="btn-ghost" href="stone_tools.kml" download>Download KML</a>
-      </div>
-      <div id="map" role="application" aria-label="Map of filtered sites"></div>
-      <div class="map-foot">
-        <div id="mapLegend" class="legend"></div>
-        <p class="chart-note" id="mapNote"></p>
-      </div>
     </section>
 
     <!-- table -->

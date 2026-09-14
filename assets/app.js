@@ -64,6 +64,12 @@
           "unavailable. The Map and Table tabs still work.";
       }
       render();
+      // The map is the default view, so it initialises during first paint.
+      // Nudge Leaflet once layout has settled in case it measured too early.
+      if (map) {
+        requestAnimationFrame(function () { map.invalidateSize(); });
+        setTimeout(function () { map.invalidateSize(); fitMap(); }, 250);
+      }
     })
     .catch(function (err) {
       $("chartSub").textContent =
