@@ -553,3 +553,9 @@ dialog::backdrop { background: rgba(11,11,11,.45); }
 
 .q-quote-more { margin: 12px 0 0 !important; font-size: 12.5px; }
 .q-quote-more a { font-weight: 600; }
+
+.q-instruction {
+  margin: 10px 0 0; padding: 10px 14px; max-width: 84ch;
+  background: var(--accent-wash); border-radius: 8px;
+  font-size: 14px; color: var(--text-primary); font-weight: 500;
+}
