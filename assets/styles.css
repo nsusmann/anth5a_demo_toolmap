@@ -32,6 +32,14 @@
   --series-8: #e34948;
   --series-other: #9b9a92;
 
+  /* Technique-industry ramp: ONE violet hue, light->dark, deliberately not the
+     map's categorical hues so the two colour systems never read as the same
+     scheme. Validated ordinal in both modes; every step works as text. */
+  --ind-1:    #3b1f7a;   /* Lomekwian  */
+  --ind-2:    #6435bd;   /* Oldowan    */
+  --ind-3:    #8a5ce0;   /* Acheulean  */
+  --ind-none: #78776f;   /* later / not in these three */
+
   --grid:  #e6e5e0;
   --axis:  #b9b8b0;
 
@@ -68,7 +76,15 @@
     --series-8: #e66767;
     --series-other: #7e7d76;
 
-    --grid: #2c2c2a;
+    --ind-1:    #d5c4ff;
+    --ind-2:    #b49df5;
+    --ind-3:    #8d78e0;
+    --ind-none: #93928a;
+    --ind-1:    #d5c4ff;
+  --ind-2:    #b49df5;
+  --ind-3:    #8d78e0;
+  --ind-none: #93928a;
+  --grid: #2c2c2a;
     --axis: #56564f;
     --shadow: 0 1px 2px rgba(0,0,0,.5), 0 6px 18px rgba(0,0,0,.35);
   }

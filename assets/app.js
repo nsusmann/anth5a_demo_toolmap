@@ -152,17 +152,18 @@
         return '<span><i style="background:' + industryColour(name) + '"></i>' +
                esc(name) + " (" + countFor(name) + ")</span>";
       }).join("") +
-      '<span><i style="background:' + css("--series-other") + '"></i>later / none (' +
+      '<span><i style="background:' + css("--ind-none") + '"></i>later / none (' +
       countFor(null) + ")</span>";
   }
 
   // Industry a technique first appears in, across Lomekwian -> Oldowan -> Acheulean.
-  // Slots 1-3 are the trio validated for all-pairs CVD separation; techniques that
-  // appear only in later assemblages take the neutral grey.
+  // This is an ordered sequence, so it gets a single-hue violet ramp rather than
+  // categorical hues - which also keeps it from being mistaken for the map's
+  // colour scheme, where blue/orange/aqua mean species or technology.
   function industryColour(name) {
-    return { "Lomekwian": css("--series-1"),
-             "Oldowan":   css("--series-2"),
-             "Acheulean": css("--series-3") }[name] || css("--series-other");
+    return { "Lomekwian": css("--ind-1"),
+             "Oldowan":   css("--ind-2"),
+             "Acheulean": css("--ind-3") }[name] || css("--ind-none");
   }
 
   function readSelect(el) {
@@ -615,9 +616,10 @@
       }];
       note = "Percentage of the " + rows.length + " filtered entries in which each technique was " +
              "recorded as present. A low bar can mean the technique was rare, or simply that it " +
-             "is rarely reported. Bars are coloured by the earliest industry the technique is " +
-             "recorded in: blue Lomekwian, orange Oldowan, aqua Acheulean, grey for techniques " +
-             "that appear only in later assemblages.";
+             "is rarely reported. Bars use a violet scale for the earliest industry the " +
+             "technique is recorded in — darkest Lomekwian, then Oldowan, then Acheulean, " +
+             "with grey for techniques that appear only in later assemblages. That scale is " +
+             "deliberately separate from the colours used on the map.";
     }
 
     var counts = {};
