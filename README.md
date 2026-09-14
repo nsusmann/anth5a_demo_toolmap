@@ -7,6 +7,15 @@ No account or login is needed — it is a static site.
 
 **Live site:** <https://nsusmann.github.io/anth5a_demo_toolmap/>
 
+> **Disclaimer.** This tool was created by Dr. Natalie Susmann for the sole purpose of an
+> in-class exercise. It is for demonstration purposes only and should not be used in lieu of the
+> original publication. Please refer to the original publication for any research, and give
+> credit to the original authors:
+>
+> Paige, J. and Perreault, C. 2023. A Dataset Describing the Manufacturing of Stone Tools Over
+> 3 Million Years. *Journal of Open Archaeology Data*, 11: 12, pp. 1–7.
+> DOI: <https://doi.org/10.5334/joad.114>
+
 ---
 
 ## The data
