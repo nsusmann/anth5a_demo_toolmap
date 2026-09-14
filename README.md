@@ -18,6 +18,23 @@ This was purposefully designed to be an open, static site, so no login is requir
 
 ---
 
+---
+
+## Notes for students
+
+- **"Technique" is not "tool type."** The 33 columns record *how* a tool was made: faceting a
+  platform, striking a burin spall, retouching a tang, etc. These are not named typologies like "handaxe" or
+  "Levallois point." The *Technology described* field often names those, in my words.
+- **A 0 means "not reported," not "did not happen."** Richer and better-published assemblages
+  show more techniques. Paige and Perreault (2023) note that common practices such as bipolar percussion are
+  probably under-represented.
+- **Borders are not dynamic** The borders shown here are based on 2026 data. 
+- **Dataset coverage is limited to a single publication** and not representative of the full
+  scope of what's known, nor what likely happened.
+- Be critical of trends you find, in light of all the limitations I have disclosed. For example: *Techniques used vs. age* chart trends upward -- how might you push back on that observation?
+
+---
+
 ## The data
 
 > Paige, J. and Perreault, C. 2023. A Dataset Describing the Manufacturing of Stone Tools Over
@@ -45,29 +62,7 @@ Each of the 155 rows is **one technology or set of technologies** reported in a 
 
 ---
 
-## Files
-
-| Path | What it is |
-|---|---|
-| `index.html`, `assets/` | The site itself |
-| `data/stone_tools.csv` | Tidied dataset, one row per entry, 33 technique columns, plus `technology` |
-| `data/stone_tools.json` | The same data plus the codebook; what the page loads |
-| `stone_tools.kml` | All 145 mapped entries for Google Earth or QGIS |
-| `Paige_Perreault_2023_DatasetManufacture.pdf` | The published paper |
-| `procedural units obfus.xlsx` | The source workbook, unmodified |
-| `assets/img/` | Reference photographs of an Oldowan chopper and an Acheulean biface |
-| `build/` | The scripts that regenerate the CSV, JSON and KML |
-
-### The KML
-
-`stone_tools.kml` opens in Google Earth, QGIS or ArcGIS. Placemarks are foldered by entry type
-and then by country, and each carries the full record — age, species, technology description,
-reference, and all 33 techniques as `ExtendedData` fields, so it can be styled or queried on any
-of them.
-
----
-
-## Three things the page adds to the published data
+## What Professor Susmann Tweaked
 
 All are flagged in the app's *Citation & notes* tab, and none is the authors' work:
 
@@ -146,21 +141,6 @@ for colour-blind readers.
 
 ---
 
-## Notes for students
-
-- **"Technique" is not "tool type."** The 33 columns record *how* a tool was made: faceting a
-  platform, striking a burin spall, retouching a tang, etc. These are not named typologies like "handaxe" or
-  "Levallois point." The *Technology described* field often names those, in my words.
-- **A 0 means "not reported," not "did not happen."** Richer and better-published assemblages
-  show more techniques. Paige and Perreault (2023) note that common practices such as bipolar percussion are
-  probably under-represented.
-- **Borders are not dynamic** The borders shown here are based on 2026 data. 
-- **Dataset coverage is limited to a single publication** and not representative of the full
-  scope of what's known, nor what likely happened.
-- Be critical of trends you find, in light of all the limitations I have disclosed. For example: *Techniques used vs. age* chart trends upward -- how might you push back on that observation?
-
----
-
 ## Publishing to GitHub Pages
 
 This repository is already published at <https://nsusmann.github.io/anth5a_demo_toolmap/>,
@@ -202,6 +182,27 @@ python build/build_data.py .
 
 This regenerates `data/stone_tools.csv`, `data/stone_tools.json` and `stone_tools.kml`.
 
+---
+
+## Files
+
+| Path | What it is |
+|---|---|
+| `index.html`, `assets/` | The site itself |
+| `data/stone_tools.csv` | Tidied dataset, one row per entry, 33 technique columns, plus `technology` |
+| `data/stone_tools.json` | The same data plus the codebook; what the page loads |
+| `stone_tools.kml` | All 145 mapped entries for Google Earth or QGIS |
+| `Paige_Perreault_2023_DatasetManufacture.pdf` | The published paper |
+| `procedural units obfus.xlsx` | The source workbook, unmodified |
+| `assets/img/` | Reference photographs of an Oldowan chopper and an Acheulean biface |
+| `build/` | The scripts that regenerate the CSV, JSON and KML |
+
+### The KML
+
+`stone_tools.kml` opens in Google Earth, QGIS or ArcGIS. Placemarks are foldered by entry type
+and then by country, and each carries the full record — age, species, technology description,
+reference, and all 33 techniques as `ExtendedData` fields, so it can be styled or queried on any
+of them.
 ---
 
 Dr. Natalie Susmann created this tool with the help of Claude Code Opus 5 from September 11,
