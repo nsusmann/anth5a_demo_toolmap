@@ -90,7 +90,7 @@ All are flagged in the app's *Citation & notes* tab, and none is the authors' wo
    Acheulean — the Acheulo-Yabrudian at Qesem Cave, the Fauresmith at Kathu Pan 1, and Nor
    Geghi 1. The full reasoning, entry by entry, is commented in `build/build_data.py`.
 
-   A useful classroom result falls straight out of the coding: **bifacial retouch is recorded in
+   One result falls straight out of the coding: **bifacial retouch is recorded in
    0 of the 15 Lomekwian and Oldowan entries, and in 10 of the 12 Acheulean ones.** Set *Chart* to
    *Technique frequency* and *Compare by* to *Technology* to see it.
 
@@ -156,9 +156,10 @@ for colour-blind readers.
   probably under-represented.
 - **Modern borders are a poor fit for deep prehistory.** Country is a search convenience, not an
   analytical unit.
-- **Coverage follows the literature,** so it is patchy rather than a sample of everything that exists.
+- **Dataset coverage is limited to a single publication** and not representative of the full
+  scope of what's known, nor what likely happened.
 - The *Techniques used vs. age* chart trends upward. Some of that is real cumulative culture and
-  some is preservation and reporting bias — a good argument to have in class.
+  some is preservation and reporting bias.
 
 ---
 

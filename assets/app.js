@@ -672,8 +672,8 @@
                "dataset; modern borders are a rough guide only for deep prehistory.",
       species: "“Unattributed” marks entries the original publications did not assign to a " +
                "hominin species — common for older or fragmentary assemblages.",
-      continent: "Coverage follows the published literature, so it is patchy rather than a sample " +
-                 "of everything that exists.",
+      continent: "Dataset coverage is limited to a single publication and not representative of " +
+                 "the full scope of what's known, nor what likely happened.",
       technology: "Industry attribution is not in the published dataset — it was added for this " +
                   "page from site, age and the coder's description, and only four rows name an " +
                   "industry themselves. “Other” is not “unknown”: it holds every " +
