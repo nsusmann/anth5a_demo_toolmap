@@ -42,7 +42,7 @@ Each of the 155 rows is **one technology or one set of technologies** reported i
 - 145 archaeological entries, drawn from 100 sites
 - 5 non-human primate tool-making behaviours
 - 5 technologies produced in controlled flintknapping experiments
-- Coverage: ~3.3 million years ago to the 19th century AD
+- Coverage: ~3.3 million years ago to the 19th century CE
 
 ---
 
