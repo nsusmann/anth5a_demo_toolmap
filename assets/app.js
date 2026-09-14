@@ -374,8 +374,11 @@
                  '<a href="' + esc(info.licence_url) + '" target="_blank" rel="noopener">' +
                  esc(info.licence) + "</a>";
       } else {
-        credit = '<a href="' + esc(info.link) + '" target="_blank" rel="noopener">' +
-                 esc(info.link_text) + "</a>";
+        // no usable photograph: point at pages that show the artefacts instead
+        credit = (info.links || []).map(function (l) {
+          return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
+                 esc(l.text) + "</a>";
+        }).join("<br>");
       }
 
       return '<figure class="tech-fig">' + visual +
@@ -1101,7 +1104,17 @@
   function techThumb(r) {
     var name = META.technology_image_of[r.technology];
     var info = name && META.technology_images[name];
-    if (!info || !info.image) return "";
+    if (!info) return "";
+    if (!info.image) {
+      var links = (info.links || []).map(function (l) {
+        return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
+               esc(l.text) + "</a>";
+      }).join("<br>");
+      if (!links) return "";
+      return '<p class="pop-tech"><b>' + esc(name) + "</b>" +
+        '<span class="td-sub">' + esc(info.caption) + "</span>" +
+        '<span class="td-sub">' + links + "</span></p>";
+    }
     return '<p class="pop-tech"><b>' + esc(name) + " (reference photograph)</b>" +
       '<img class="pop-thumb" src="' + esc(info.image) + '" alt="' + esc(info.alt) + '" loading="lazy">' +
       '<span class="td-sub">' + esc(info.caption) + " Photo: " + esc(info.credit) + ", " +

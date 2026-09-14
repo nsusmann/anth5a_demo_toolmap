@@ -136,11 +136,15 @@ TECHNOLOGY_ORDER = ["Lomekwian", "Oldowan", "Oldowan (probable)",
 TECHNOLOGY_IMAGES = {
     "Lomekwian": {
         "image": None,
-        "caption": "No freely-licensed photograph of a Lomekwi 3 artefact exists. "
-                   "The only published images are the copyrighted figures in "
-                   "Harmand et al. 2015.",
-        "link": "https://doi.org/10.1038/nature14464",
-        "link_text": "Harmand et al. 2015, Nature",
+        "caption": "No freely-licensed photograph of a Lomekwi 3 artefact exists — the "
+                   "published images are copyrighted. These pages show and explain them.",
+        "links": [
+            {"url": "https://becominghuman.org/pathways-to-discovery/the-fossil-record/"
+                    "archaeology-tools-and-artifacts/lithics-lomekwi-and-dikika/",
+             "text": "See the tools: Becoming Human (Institute of Human Origins, ASU)"},
+            {"url": "https://doi.org/10.1038/nature14464",
+             "text": "Original paper: Harmand et al. 2015, Nature"},
+        ],
     },
     "Oldowan": {
         "image": "assets/img/oldowan-chopper.jpg",

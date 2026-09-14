@@ -123,7 +123,12 @@ an adaptation.
 **There is no Lomekwian photograph.** No freely-licensed image of a Lomekwi 3 artefact exists on
 Wikimedia (Commons was searched for *Lomekwi*, *Lomekwian*, *West Turkana* and *Harmand*); the
 only published photographs are the copyrighted figures in Harmand et al. 2015. Rather than
-substitute something misleading, that card says so and links to the paper.
+substitute something misleading, that card says so and links out instead:
+
+- [Becoming Human — Lithics: Lomekwi and Dikika](https://becominghuman.org/pathways-to-discovery/the-fossil-record/archaeology-tools-and-artifacts/lithics-lomekwi-and-dikika/)
+  (Institute of Human Origins, ASU), which shows the artefacts and explains how Lomekwian
+  knapping differs from Oldowan
+- [Harmand et al. 2015, *Nature*](https://doi.org/10.1038/nature14464), the original paper
 
 The `(probable)` values share their parent industry's photograph. In map popups the image is
 labelled *reference photograph* and *not an artefact from this site*, because it illustrates the
