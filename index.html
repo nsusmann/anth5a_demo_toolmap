@@ -129,15 +129,79 @@
   <!-- ───────────────────────── results ───────────────────────── -->
   <main class="panel">
     <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" id="tab-questions" aria-controls="view-questions" aria-selected="false" class="tab">ANTH 5A discussion questions</button>
       <button role="tab" id="tab-map"   aria-controls="view-map"   aria-selected="true"  class="tab is-on">Map</button>
       <button role="tab" id="tab-chart" aria-controls="view-chart" aria-selected="false" class="tab">Chart</button>
       <button role="tab" id="tab-table" aria-controls="view-table" aria-selected="false" class="tab">Table</button>
-      <button role="tab" id="tab-questions" aria-controls="view-questions" aria-selected="false" class="tab">ANTH 5A discussion questions</button>
       <button role="tab" id="tab-about" aria-controls="view-about" aria-selected="false" class="tab">Citation &amp; notes</button>
     </div>
 
     <!-- reference photographs, shown whenever a technology is in play -->
     <section id="techFigures" class="tech-figures" aria-label="Reference photographs" hidden></section>
+
+    <!-- ANTH 5A discussion questions
+         ============================================================
+         EDIT THE QUESTIONS HERE. Each <li> is one question.
+         Plain HTML - change the words freely.
+         ============================================================ -->
+    <section role="tabpanel" id="view-questions" aria-labelledby="tab-questions" class="view about" hidden>
+
+      <div class="q-intro">
+        <h2>Discussion questions</h2>
+        <p class="q-instruction">
+          Please write notes to these questions on the back of today's P+L handout.
+        </p>
+      </div>
+
+      <ol class="q-list q-list-major">
+        <li>
+          Please read the
+          <a href="https://github.com/nsusmann/anth5a_demo_toolmap#notes-for-students" target="_blank" rel="noopener">Notes for Students</a>
+          section in the ReadMe file. Also pay attention to this quote from the
+          &ldquo;Data&rdquo; section:
+
+          <details class="q-details">
+            <summary>Read the quote</summary>
+            <div class="q-quote">
+              <p>
+                Each of the 155 rows is <strong>one technology or set of technologies</strong>
+                reported in a publication by another author, and these were gathered by Paige and
+                Perreault into one geolocated dataset. The dataset is <strong>not</strong> one
+                artefact or site per row. Every row is coded for the presence or absence of the
+                same 33 <em>procedural units</em> (manufacturing steps).
+              </p>
+              <ul>
+                <li>145 archaeological entries, drawn from 100 sites</li>
+                <li>5 non-human primate tool-making behaviours</li>
+                <li>5 technologies produced in controlled flintknapping experiments
+                    (i.e., experimental archaeology)</li>
+                <li>Coverage: ~3.3 million years ago to the 19th century CE</li>
+              </ul>
+              <p class="q-quote-more">
+                <a href="https://github.com/nsusmann/anth5a_demo_toolmap#the-data" target="_blank" rel="noopener">Read the full Data section in the ReadMe &rarr;</a>
+              </p>
+            </div>
+          </details>
+
+          <p class="q-task">Your task: make sure everyone understands how the dataset works.</p>
+        </li>
+
+        <li>
+          Take some time to explore the visualization tool, in both map and graph mode. Talk
+          through with your group: What does this dataset show? Can you detect any sort of
+          hierarchical classification schema?
+        </li>
+
+        <li>
+          Do you observe any trends that spark your curiosity? Note them down. Now think: why do
+          you need to be extremely cautious about this observation?
+        </li>
+
+        <li>
+          Did you find this tool useful at all? Why? No? Why not?
+        </li>
+      </ol>
+    </section>
 
     <!-- map -->
     <section role="tabpanel" id="view-map" aria-labelledby="tab-map" class="view is-on">
@@ -247,70 +311,6 @@
           <tbody></tbody>
         </table>
       </div>
-    </section>
-
-    <!-- ANTH 5A discussion questions
-         ============================================================
-         EDIT THE QUESTIONS HERE. Each <li> is one question.
-         Plain HTML - change the words freely.
-         ============================================================ -->
-    <section role="tabpanel" id="view-questions" aria-labelledby="tab-questions" class="view about" hidden>
-
-      <div class="q-intro">
-        <h2>Discussion questions</h2>
-        <p class="q-instruction">
-          Please write notes to these questions on the back of today's P+L handout.
-        </p>
-      </div>
-
-      <ol class="q-list q-list-major">
-        <li>
-          Please read the
-          <a href="https://github.com/nsusmann/anth5a_demo_toolmap#notes-for-students" target="_blank" rel="noopener">Notes for Students</a>
-          section in the ReadMe file. Also pay attention to this quote from the
-          &ldquo;Data&rdquo; section:
-
-          <details class="q-details">
-            <summary>Read the quote</summary>
-            <div class="q-quote">
-              <p>
-                Each of the 155 rows is <strong>one technology or set of technologies</strong>
-                reported in a publication by another author, and these were gathered by Paige and
-                Perreault into one geolocated dataset. The dataset is <strong>not</strong> one
-                artefact or site per row. Every row is coded for the presence or absence of the
-                same 33 <em>procedural units</em> (manufacturing steps).
-              </p>
-              <ul>
-                <li>145 archaeological entries, drawn from 100 sites</li>
-                <li>5 non-human primate tool-making behaviours</li>
-                <li>5 technologies produced in controlled flintknapping experiments
-                    (i.e., experimental archaeology)</li>
-                <li>Coverage: ~3.3 million years ago to the 19th century CE</li>
-              </ul>
-              <p class="q-quote-more">
-                <a href="https://github.com/nsusmann/anth5a_demo_toolmap#the-data" target="_blank" rel="noopener">Read the full Data section in the ReadMe &rarr;</a>
-              </p>
-            </div>
-          </details>
-
-          <p class="q-task">Your task: make sure everyone understands how the dataset works.</p>
-        </li>
-
-        <li>
-          Take some time to explore the visualization tool, in both map and graph mode. Talk
-          through with your group: What does this dataset show? Can you detect any sort of
-          hierarchical classification schema?
-        </li>
-
-        <li>
-          Do you observe any trends that spark your curiosity? Note them down. Now think: why do
-          you need to be extremely cautious about this observation?
-        </li>
-
-        <li>
-          Did you find this tool useful at all? Why? No? Why not?
-        </li>
-      </ol>
     </section>
 
     <!-- about -->
