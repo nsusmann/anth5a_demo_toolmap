@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
       integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw=="
       crossorigin="anonymous" referrerpolicy="no-referrer">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=2026-09-14">
 </head>
 <body>
 
@@ -72,13 +72,13 @@
       <select id="fTechnology" multiple size="6" aria-describedby="hTech0"></select>
       <p class="hint" id="hTech0">Paige and Perreault (2023) does not identify technology-type.
         Dr. Susmann created these categories based on the dataset's reference publications.
-        See <a href="#caveats">the notes</a>.</p>
+        See <a href="https://github.com/nsusmann/anth5a_demo_toolmap#what-professor-susmann-tweaked" target="_blank" rel="noopener">the notes</a>.</p>
     </div>
 
     <div class="field">
       <label for="fCountry">Country</label>
       <select id="fCountry" multiple size="6" aria-describedby="hCountry"></select>
-      <p class="hint" id="hCountry">Derived from site coordinates &mdash; see <a href="#caveats">the notes</a>.</p>
+      <p class="hint" id="hCountry">Derived from site coordinates &mdash; see <a href="https://github.com/nsusmann/anth5a_demo_toolmap#what-professor-susmann-tweaked" target="_blank" rel="noopener">the notes</a>.</p>
     </div>
 
     <div class="field">
@@ -95,6 +95,7 @@
         </span>
       </div>
       <select id="fTechnique" multiple size="9" aria-describedby="hTech"></select>
+      <div id="techKey" class="tech-key" aria-label="Colour key: earliest industry each technique appears in"></div>
       <p class="hint" id="hTech">
         This dataset records <em>how tools were made</em>, not named tool types.
         <button type="button" class="linkish" id="openCodebook">What do these mean?</button>
@@ -318,6 +319,10 @@
 
       <div class="cite-card">
         <h2>How to cite this dataset</h2>
+        <p class="cite-lead">
+          Please refer to the original publication for any scholarly research work.
+          This tool is for teaching purposes only.
+        </p>
         <p class="cite-formatted" id="citeText">
           Paige, J. and Perreault, C. 2023. A Dataset Describing the Manufacturing of Stone
           Tools Over 3 Million Years. <em>Journal of Open Archaeology Data</em>, 11: 12, pp. 1&ndash;7.
@@ -354,7 +359,7 @@
         </dl>
       </div>
 
-      <div class="about-grid">
+      <div>
         <section>
           <h2>What is in the dataset</h2>
           <p>
@@ -375,55 +380,6 @@
           </ul>
         </section>
 
-        <section id="caveats">
-          <h2>Read the data carefully</h2>
-          <ul class="facts">
-            <li>
-              <strong>&ldquo;Technique&rdquo; is not &ldquo;tool type&rdquo;.</strong> The dataset codes
-              <em>procedural units</em> &mdash; the manufacturing steps a knapper took (faceting a
-              platform, striking a burin spall, retouching a tang). It does not code named
-              typologies such as &ldquo;handaxe&rdquo; or &ldquo;Levallois point&rdquo;. The
-              <em>Technology described</em> field in the table often names those, in the coder's words.
-            </li>
-            <li>
-              <strong>Technology is not in the published dataset either &mdash; it is our reading.</strong>
-              Only four of the 155 rows name an industry at all, in the coder's free text
-              (&ldquo;Oldowan&rdquo; at EG12 and NY 18 Nyabusosi, &ldquo;Acheulean handaxe&rdquo; in one
-              experiment). The rest of the <em>Technology</em> labels were assigned here from the site,
-              its published age and the description of the artefacts. <em>Probable</em> marks the
-              calls that are genuinely arguable: Olduvai Bed II BK, usually read as Developed Oldowan
-              but coded here with no bifacial retouch; and Garba IVd, the contested ~1.7 Ma claim for
-              an early Acheulean. <em>Other</em> is not &ldquo;unknown&rdquo; &mdash; it includes
-              assemblages that do contain bifaces without being Acheulean, such as the
-              Acheulo-Yabrudian at Qesem Cave, the Fauresmith at Kathu Pan 1, and Nor Geghi 1.
-              Disagree with a call and you are doing archaeology correctly; the reasoning is in
-              <code>build/build_data.py</code>.
-            </li>
-            <li>
-              <strong>Country is not in the published dataset.</strong> It was added here by
-              looking up each site's coordinates against world boundaries. 19 sites sit just
-              offshore of the coastline used and were assigned to the nearest country; these are
-              flagged <em>approx.</em> Modern borders are also a poor fit for deep prehistory
-              &mdash; treat country as a convenience for searching, not as an analytical unit.
-            </li>
-            <li>
-              <strong>Coordinates are approximate.</strong> The file used here has had site
-              locations slightly displaced, so points show the right region but not an exact
-              findspot.
-            </li>
-            <li>
-              <strong>Absence is not absence of evidence.</strong> A 0 means the technique was
-              not reported in that publication. Richer, better-published assemblages tend to
-              show more techniques, and reports tend to dwell on the showier pieces. As the
-              authors note, common practices such as bipolar percussion are probably
-              under-represented.
-            </li>
-            <li>
-              <strong>10 entries have no coordinates</strong> (the primate and experimental
-              entries) and so never appear on the map, though they do appear in charts and the table.
-            </li>
-          </ul>
-        </section>
       </div>
 
       <section>
@@ -471,6 +427,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
         integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v=2026-09-14"></script>
 </body>
 </html>

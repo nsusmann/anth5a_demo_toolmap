@@ -288,6 +288,18 @@ def main():
         for rec in recs:
             w.writerow({c: ("" if rec[c] is None else rec[c]) for c in cols})
 
+    # Which industry does each technique first show up in, across the
+    # Lomekwian -> Oldowan -> Acheulean sequence? Derived from the records, so it
+    # tracks the Technology attribution rather than being hand-listed.
+    seq = [("Lomekwian", ["Lomekwian"]),
+           ("Oldowan", ["Oldowan", "Oldowan (probable)"]),
+           ("Acheulean", ["Acheulean", "Acheulean (probable)"])]
+    buckets = [(name, [r for r in recs if r["technology"] in vals]) for name, vals in seq]
+    technique_industry = {}
+    for key in PU_KEYS:
+        technique_industry[key] = next(
+            (name for name, rows in buckets if any(r[key] == 1 for r in rows)), None)
+
     meta = {
         "citation": {
             "authors": "Paige, J. and Perreault, C.",
@@ -314,6 +326,8 @@ def main():
         ],
         "groups": list(GROUPS.keys()),
         "technology_order": TECHNOLOGY_ORDER,
+        "technique_industry": technique_industry,
+        "industry_sequence": ["Lomekwian", "Oldowan", "Acheulean"],
         "technology_images": TECHNOLOGY_IMAGES,
         "technology_image_of": TECHNOLOGY_IMAGE_OF,
         "n_records": len(recs),

@@ -45,7 +45,16 @@
   }
 
   /* ================================ boot ================================ */
-  fetch("data/stone_tools.json")
+  // Reuse the ?v= stamp on our own <script> tag so a redeploy never serves a stale
+  // page against a cached dataset.
+  var VERSION = (function () {
+    var el = document.currentScript ||
+             document.querySelector('script[src*="assets/app.js"]');
+    var m = el && /[?&]v=([^&]+)/.exec(el.getAttribute("src") || "");
+    return m ? m[1] : "";
+  })();
+
+  fetch("data/stone_tools.json" + (VERSION ? "?v=" + VERSION : ""))
     .then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
@@ -122,14 +131,38 @@
       og.label = g;
       PUS.filter(function (p) { return p.group === g; }).forEach(function (p) {
         var n = DATA.reduce(function (a, r) { return a + (r[p.key] === 1 ? 1 : 0); }, 0);
+        var ind = META.technique_industry[p.key];
         var o = document.createElement("option");
         o.value = p.key;
         o.textContent = p.label + "  (" + n + ")";
-        o.title = p.definition;
+        o.title = p.definition + (ind ? "  |  First appears in the " + ind : "");
+        o.style.color = industryColour(ind);
         og.appendChild(o);
       });
       techSel.appendChild(og);
     });
+
+    // a written key, so colour is never the only carrier of meaning
+    var ti = META.technique_industry;
+    var countFor = function (name) {
+      return Object.keys(ti).filter(function (k) { return ti[k] === name; }).length;
+    };
+    $("techKey").innerHTML =
+      META.industry_sequence.map(function (name) {
+        return '<span><i style="background:' + industryColour(name) + '"></i>' +
+               esc(name) + " (" + countFor(name) + ")</span>";
+      }).join("") +
+      '<span><i style="background:' + css("--series-other") + '"></i>later / none (' +
+      countFor(null) + ")</span>";
+  }
+
+  // Industry a technique first appears in, across Lomekwian -> Oldowan -> Acheulean.
+  // Slots 1-3 are the trio validated for all-pairs CVD separation; techniques that
+  // appear only in later assemblages take the neutral grey.
+  function industryColour(name) {
+    return { "Lomekwian": css("--series-1"),
+             "Oldowan":   css("--series-2"),
+             "Acheulean": css("--series-3") }[name] || css("--series-other");
   }
 
   function readSelect(el) {
@@ -574,13 +607,17 @@
         data: order.map(function (p) {
           return round1(100 * rows.reduce(function (s, r) { return s + r[p.key]; }, 0) / rows.length);
         }),
-        backgroundColor: css("--series-1"),
+        backgroundColor: order.map(function (p) {
+          return industryColour(META.technique_industry[p.key]);
+        }),
         borderWidth: 0, borderRadius: 4, borderSkipped: false,
         barPercentage: 0.82, categoryPercentage: 0.9
       }];
       note = "Percentage of the " + rows.length + " filtered entries in which each technique was " +
              "recorded as present. A low bar can mean the technique was rare, or simply that it " +
-             "is rarely reported.";
+             "is rarely reported. Bars are coloured by the earliest industry the technique is " +
+             "recorded in: blue Lomekwian, orange Oldowan, aqua Acheulean, grey for techniques " +
+             "that appear only in later assemblages.";
     }
 
     var counts = {};
@@ -610,7 +647,11 @@
                 },
                 afterBody: function (items) {
                   var p = PUS.filter(function (x) { return x.label === items[0].label; })[0];
-                  return p ? "\n" + wrapText(p.definition, 46) : "";
+                  if (!p) return "";
+                  var i = META.technique_industry[p.key];
+                  return "\n" + (i ? "First appears in the " + i
+                                   : "Not in the Lomekwian, Oldowan or Acheulean") +
+                         "\n\n" + wrapText(p.definition, 46);
                 }
               }
             })

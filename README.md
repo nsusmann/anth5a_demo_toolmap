@@ -100,6 +100,9 @@ All are flagged in the app's *Citation & notes* tab, and none is the authors' wo
 Site coordinates were give by Paige and Perreault. In this release of the workbook are **approximate** — they show the right
 region but not an exact findspot. Students should consider why non-specific coordinates were used.
 
+Ten entries (the primate and experimental ones) have no coordinates at all, so they never
+appear on the map, though they do appear in the charts and the table.
+
 ### Reference photographs
 
 Two Wikimedia Commons photographs are bundled in `assets/img/` and shown whenever a technology
