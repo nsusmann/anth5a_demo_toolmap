@@ -33,6 +33,9 @@ This was purposefully designed to be an open, static site, so no login is requir
   scope of what's known, nor what likely happened.
 - Be critical of trends you find, in light of all the limitations I have disclosed. For example: *Techniques used vs. age* chart trends upward -- how might you push back on that observation?
 
+The most useful sections for you to check out are [The data](#the-data) and
+[What Professor Susmann Tweaked](#what-professor-susmann-tweaked).
+
 ---
 
 ## The data
