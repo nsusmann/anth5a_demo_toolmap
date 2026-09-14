@@ -35,7 +35,7 @@ The paper is redistributed here as `Paige_Perreault_2023_DatasetManufacture.pdf`
 licence. **Credit the authors in any reuse.** This teaching page is not affiliated with the
 authors or with the *Journal of Open Archaeology Data*.
 
-Each of the 155 rows is **one technology or set of technologies** reported in a publication by another author, and these were gathered by Paige and Perrault into one geolocated dataset. The dataset is **not** one artefact or site per row. Every row is coded for the presence or absence of the same
+Each of the 155 rows is **one technology or set of technologies** reported in a publication by another author, and these were gathered by Paige and Perreault into one geolocated dataset. The dataset is **not** one artefact or site per row. Every row is coded for the presence or absence of the same
 33 *procedural units* (manufacturing steps).
 
 - 145 archaeological entries, drawn from 100 sites
@@ -99,7 +99,7 @@ All are flagged in the app's *Citation & notes* tab, and none is the authors' wo
    decoded as cp1252 somewhere upstream (`â€™` where `’` was meant). The build re-encodes these
    where the round-trip is lossless and leaves the text otherwise untouched.
 
-Site coordinates were give by Paige and Perrault. In this release of the workbook are **approximate** — they show the right
+Site coordinates were give by Paige and Perreault. In this release of the workbook are **approximate** — they show the right
 region but not an exact findspot. Students should consider why non-specific coordinates were used.
 
 ### Reference photographs
@@ -152,7 +152,7 @@ for colour-blind readers.
   platform, striking a burin spall, retouching a tang, etc. These are not named typologies like "handaxe" or
   "Levallois point." The *Technology described* field often names those, in my words.
 - **A 0 means "not reported," not "did not happen."** Richer and better-published assemblages
-  show more techniques. Paige and Perrault (2023) note that common practices such as bipolar percussion are
+  show more techniques. Paige and Perreault (2023) note that common practices such as bipolar percussion are
   probably under-represented.
 - **Borders are not dynamic** The borders shown here are based on 2026 data. 
 - **Dataset coverage is limited to a single publication** and not representative of the full
