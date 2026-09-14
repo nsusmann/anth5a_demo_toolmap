@@ -623,7 +623,8 @@
       };
       noteHtml = "Percentage of the " + rows.length + " filtered entries in which each technique " +
         "was recorded as present. A low bar can mean the technique was rare, or simply that it " +
-        "is rarely reported. Bars use a violet scale for the earliest industry the technique is " +
+        "is rarely reported. Bars use a violet scale for the <strong style=\"text-decoration:underline\">earliest</strong> industry " +
+        "the technique is " +
         "recorded in — darkest " + swatch("Lomekwian", "--ind-1") + ", then " +
         swatch("Oldowan", "--ind-2") + ", then " + swatch("Acheulean", "--ind-3") + ", with " +
         swatch("grey", "--ind-none") + " for techniques that appear only in later assemblages. " +
