@@ -3,7 +3,7 @@
 An interactive teaching page for **Paige & Perreault (2023)**, a dataset describing how stone
 tools were made across 3 million years of hominin evolution. Students can query the dataset by
 species, country and manufacturing technique, and read the result as a chart, a map or a table.
-No account or login is needed — it is a static site.
+This was purposefully designed to be an open, static site, so no login is required. As such, no copyrighted images are presented, and I am linking out to images wherever necessary.
 
 **Live site:** <https://nsusmann.github.io/anth5a_demo_toolmap/>
 
@@ -35,13 +35,12 @@ The paper is redistributed here as `Paige_Perreault_2023_DatasetManufacture.pdf`
 licence. **Credit the authors in any reuse.** This teaching page is not affiliated with the
 authors or with the *Journal of Open Archaeology Data*.
 
-Each of the 155 rows is **one technology or one set of technologies** reported in a publication
-— not one artefact and not one site. Every row is coded for the presence or absence of the same
+Each of the 155 rows is **one technology or set of technologies** reported in a publication by another author, and these were gathered by Paige and Perrault into one geolocated dataset. The dataset is **not** one artefact or site per row. Every row is coded for the presence or absence of the same
 33 *procedural units* (manufacturing steps).
 
 - 145 archaeological entries, drawn from 100 sites
 - 5 non-human primate tool-making behaviours
-- 5 technologies produced in controlled flintknapping experiments
+- 5 technologies produced in controlled flintknapping experiments (i.e., experimental archaeology)
 - Coverage: ~3.3 million years ago to the 19th century CE
 
 ---
@@ -73,20 +72,18 @@ of them.
 All are flagged in the app's *Citation & notes* tab, and none is the authors' work:
 
 1. **Technology** (industry attribution) is not in the published dataset. Paige & Perreault code
-   procedural units, not technocomplexes — only four of the 155 rows name an industry at all,
-   in the coder's free text. The rest were attributed here from site, published age and the
-   description of the artefacts, using six values:
+   procedural units. Only four of the original 155 rows were associated with a particular industry. Dr. Susmann attributed the rest, whenever possible, referring to the original publications. They were based on the site, published age, and description of the artifacts. Students should recognize that this is for an **in-class demo only** and there are likely cases where multiple technologies were present at the location. Decisions had to be made for the purpose of this tool, and a best-fit was made when possible. If not possible, I skipped it. Since this dataset is not per site or per artifact, too many of them could not be associated cleanly with one technology-type, which is why 125 are in the "other" category. 
 
    | Value | n | What it means |
    |---|---|---|
-   | Lomekwian | 2 | Lomekwi 3, 3.3 Ma — explicitly pre-Oldowan |
+   | Lomekwian | 2 | Lomekwi 3, 3.3 Ma. These are pre-Oldowan |
    | Oldowan | 11 | Bokol Dora 1, EG12/Gona, Lokalalei 2c, Kanjera, NY 18 Nyabusosi |
-   | Oldowan (probable) | 2 | Olduvai Bed II BK — usually Developed Oldowan, but coded here with no bifacial retouch |
+   | Oldowan (probable) | 2 | Olduvai Bed II BK — usually Developed Oldowan. Here, they are defined as having no bifacial retouch |
    | Acheulean | 12 | Peninj, Olorgesailie, Canteen Koppie, Gesher Benot Ya'aqov, Hugub, Boxgrove, Torre in Pietra M |
    | Acheulean (probable) | 3 | Garba IVd (the contested ~1.7 Ma early-Acheulean claim) and one experimental handaxe replication |
    | Other | 125 | Everything else |
 
-   **`Other` is not `unknown`.** It includes assemblages that contain bifaces without being
+   **`Other` is not always `unknown`.** It includes assemblages that contain bifaces without being
    Acheulean — the Acheulo-Yabrudian at Qesem Cave, the Fauresmith at Kathu Pan 1, and Nor
    Geghi 1. The full reasoning, entry by entry, is commented in `build/build_data.py`.
 
@@ -102,8 +99,8 @@ All are flagged in the app's *Citation & notes* tab, and none is the authors' wo
    decoded as cp1252 somewhere upstream (`â€™` where `’` was meant). The build re-encodes these
    where the round-trip is lossless and leaves the text otherwise untouched.
 
-Site coordinates in this release of the workbook are **approximate** — they show the right
-region but not an exact findspot.
+Site coordinates were give by Paige and Perrault. In this release of the workbook are **approximate** — they show the right
+region but not an exact findspot. Students should consider why non-specific coordinates were used.
 
 ### Reference photographs
 
@@ -117,13 +114,11 @@ artefacts from the **type site** of their industry:
 | Acheulean | [Biface de St Acheul](https://commons.wikimedia.org/wiki/File:Biface_de_St_Acheul_MHNT.jpg), Saint-Acheul, c. 500–300 ka, Muséum de Toulouse | Didier Descouens | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
 Both licences require attribution, which is rendered beside every appearance of the image. The
-files were downscaled to 760px for the web — a technical modification the licences allow, not
-an adaptation.
+files were downscaled to 760px for the web.
 
 **There is no Lomekwian photograph.** No freely-licensed image of a Lomekwi 3 artefact exists on
 Wikimedia (Commons was searched for *Lomekwi*, *Lomekwian*, *West Turkana* and *Harmand*); the
-only published photographs are the copyrighted figures in Harmand et al. 2015. Rather than
-substitute something misleading, that card says so and links out instead:
+only published photographs are the copyrighted figures in Harmand et al. 2015. Since this is an open-access tool and not blocked by Brandeis' paywall, I have elected to link out to a page for students to explore a Lomekwi tool photograph. 
 
 - [Becoming Human — Lithics: Lomekwi and Dikika](https://becominghuman.org/pathways-to-discovery/the-fossil-record/archaeology-tools-and-artifacts/lithics-lomekwi-and-dikika/)
   (Institute of Human Origins, ASU), which shows the artefacts and explains how Lomekwian
@@ -153,18 +148,16 @@ for colour-blind readers.
 
 ## Notes for students
 
-- **"Technique" is not "tool type."** The 33 columns record *how* a tool was made — faceting a
-  platform, striking a burin spall, retouching a tang — not named typologies like "handaxe" or
-  "Levallois point." The *Technology described* field often names those, in the coder's words.
+- **"Technique" is not "tool type."** The 33 columns record *how* a tool was made: faceting a
+  platform, striking a burin spall, retouching a tang, etc. These are not named typologies like "handaxe" or
+  "Levallois point." The *Technology described* field often names those, in my words.
 - **A 0 means "not reported," not "did not happen."** Richer and better-published assemblages
-  show more techniques. The authors note that common practices such as bipolar percussion are
+  show more techniques. Paige and Perrault (2023) note that common practices such as bipolar percussion are
   probably under-represented.
-- **Modern borders are a poor fit for deep prehistory.** Country is a search convenience, not an
-  analytical unit.
+- **Borders are not dynamic** The borders shown here are based on 2026 data. 
 - **Dataset coverage is limited to a single publication** and not representative of the full
   scope of what's known, nor what likely happened.
-- The *Techniques used vs. age* chart trends upward. Some of that is real cumulative culture and
-  some is preservation and reporting bias.
+- Be critical of trends you find, in light of all the limitations I have disclosed. For example: *Techniques used vs. age* chart trends upward -- how might you push back on that observation?
 
 ---
 
