@@ -146,9 +146,7 @@ for colour-blind readers.
 
 ---
 
-## Teaching notes
-
-Worth saying out loud to a class, because the dataset rewards care:
+## Notes for students
 
 - **"Technique" is not "tool type."** The 33 columns record *how* a tool was made — faceting a
   platform, striking a burin spall, retouching a tang — not named typologies like "handaxe" or
