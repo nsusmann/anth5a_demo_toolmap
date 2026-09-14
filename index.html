@@ -132,6 +132,7 @@
       <button role="tab" id="tab-map"   aria-controls="view-map"   aria-selected="true"  class="tab is-on">Map</button>
       <button role="tab" id="tab-chart" aria-controls="view-chart" aria-selected="false" class="tab">Chart</button>
       <button role="tab" id="tab-table" aria-controls="view-table" aria-selected="false" class="tab">Table</button>
+      <button role="tab" id="tab-questions" aria-controls="view-questions" aria-selected="false" class="tab">ANTH 5A discussion questions</button>
       <button role="tab" id="tab-about" aria-controls="view-about" aria-selected="false" class="tab">Citation &amp; notes</button>
     </div>
 
@@ -246,6 +247,116 @@
           <tbody></tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ANTH 5A discussion questions
+         ============================================================
+         EDIT THE QUESTIONS HERE. Each <li> is one question; the
+         <span class="q-try"> line tells students which controls to use.
+         Everything below is plain HTML - change the words freely.
+         ============================================================ -->
+    <section role="tabpanel" id="view-questions" aria-labelledby="tab-questions" class="view about" hidden>
+
+      <div class="q-intro">
+        <h2>Discussion questions</h2>
+        <p>
+          Work through these with the tool open. Most ask you to set the filters a particular way
+          and then say what you see &mdash; and, just as often, to say what the data
+          <em>cannot</em> tell you.
+        </p>
+      </div>
+
+      <section class="q-group">
+        <h3>1 &middot; Getting oriented</h3>
+        <ol class="q-list">
+          <li>
+            Set <strong>Technology</strong> to Lomekwian, then Oldowan, then Acheulean, one at a
+            time. How does the number of techniques recorded per entry change across the three?
+            What does that suggest about the pace of change over three million years?
+            <span class="q-try">Technology filter &rarr; watch the <em>Techniques</em> column on the Table tab</span>
+          </li>
+          <li>
+            Compare the Oldowan chopper and the Acheulean biface photographs. Name two things a
+            knapper had to do to make the handaxe that the chopper did not require.
+            <span class="q-try">Filter by Technology to bring up the reference photographs</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="q-group">
+        <h3>2 &middot; Reading the evidence</h3>
+        <ol class="q-list" start="3">
+          <li>
+            <strong>Bifacial retouch</strong> is recorded in none of the Lomekwian or Oldowan
+            entries, and in most Acheulean ones. What does that single technique tell you about
+            how a handaxe was shaped, and why is it a better dividing line than, say, the size of
+            the tool?
+            <span class="q-try">Chart &rarr; Technique frequency &middot; Compare by &rarr; Technology</span>
+          </li>
+          <li>
+            <strong>Hard hammer percussion</strong> is recorded in all 155 entries &mdash; every
+            single one. Is that because every toolmaker in three million years used a hard hammer,
+            or is something about how the data was built producing that result?
+            <span class="q-try">Chart &rarr; Technique frequency, no breakdown</span>
+          </li>
+          <li>
+            Find an entry with very few techniques recorded. Open it and read the
+            <em>Technology described</em> field. Does the assemblage look genuinely simple, or does
+            the publication just say very little about it?
+            <span class="q-try">Table &rarr; sort by Techniques, ascending</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="q-group">
+        <h3>3 &middot; What the data cannot tell you</h3>
+        <ol class="q-list" start="6">
+          <li>
+            A <code>0</code> in this dataset means &ldquo;not reported,&rdquo; not &ldquo;did not
+            happen.&rdquo; Give an example from the tool where those two readings would lead you to
+            opposite conclusions about a site.
+          </li>
+          <li>
+            Filter to <strong>Lomekwian</strong>. There are two entries, both from Lomekwi 3. What
+            evidence would you need before you were confident the Lomekwian is a distinct industry
+            rather than one unusual site?
+            <span class="q-try">Technology &rarr; Lomekwian</span>
+          </li>
+          <li>
+            Most early entries have a species attribution of <strong>Unattributed</strong>. Why
+            would excavators decline to name a maker, and what does that caution cost us when we
+            want to link a technology to a hominin species?
+            <span class="q-try">Map &rarr; colour by Species, shape by Technology</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="q-group">
+        <h3>4 &middot; Space, time and the shape of the sample</h3>
+        <ol class="q-list" start="9">
+          <li>
+            Country was not in the original dataset &mdash; it was added here from site
+            coordinates. What is misleading about describing the Oldowan as coming from
+            &ldquo;Kenya, Ethiopia and Tanzania&rdquo;?
+            <span class="q-try">Chart &rarr; Entries by country</span>
+          </li>
+          <li>
+            Map the Oldowan, then the Acheulean. The Acheulean reaches well beyond Africa in this
+            dataset and the Oldowan largely does not. Is that a real difference in how far the two
+            technologies spread, or an artefact of which sites happen to be published here?
+            <span class="q-try">Map &rarr; Technology filter, then Zoom to results</span>
+          </li>
+          <li>
+            This tool draws on a single publication. Name one region or one period you would expect
+            to be badly under-represented, and say how you would check.
+          </li>
+        </ol>
+      </section>
+
+      <p class="q-foot">
+        Remember that many techniques in this dataset were developed by <em>Homo sapiens</em> and
+        fall outside the temporal scope of this course.
+      </p>
     </section>
 
     <!-- about -->
