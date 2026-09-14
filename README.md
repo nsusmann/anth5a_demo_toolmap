@@ -63,6 +63,9 @@ Each of the 155 rows is **one technology or set of technologies** reported in a 
 - 5 technologies produced in controlled flintknapping experiments (i.e., experimental archaeology)
 - Coverage: ~3.3 million years ago to the 19th century CE
 
+Sections of the visualizer use a color-coding system to help highlight techniques relevant
+to our course. In the "Chart" tab above, make sure you read the note underneath the graph.
+
 ---
 
 ## What Professor Susmann Tweaked
