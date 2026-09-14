@@ -203,3 +203,8 @@ python build/build_data.py .
 ```
 
 This regenerates `data/stone_tools.csv`, `data/stone_tools.json` and `stone_tools.kml`.
+
+---
+
+Dr. Natalie Susmann created this tool with the help of Claude Code Opus 5 from September 11,
+2026 – September 14, 2026.
