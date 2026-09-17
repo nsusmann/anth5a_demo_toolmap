@@ -18,8 +18,6 @@ This was purposefully designed to be an open, static site, so no login is requir
 
 ---
 
----
-
 ## Notes for students
 
 - **"Technique" is not "tool type."** The 33 columns record *how* a tool was made: faceting a

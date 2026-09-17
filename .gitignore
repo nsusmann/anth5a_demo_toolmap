@@ -4,3 +4,6 @@
 countries50.geojson
 __pycache__/
 *.pyc
+
+# Session transcript kept locally for reference - never published
+_conversation/
